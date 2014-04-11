@@ -57,3 +57,5 @@ vaccine-sentiment/
 # emacs backups
 *~
 
+# pickle files
+*.pickle
