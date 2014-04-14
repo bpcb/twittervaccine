@@ -14,11 +14,11 @@ from tweet import *
 def get_database_connection():
     conn = MySQLdb.connect(host='localhost', user='root', db='vaccine')
     return conn
-    
+
 def extract():
     """Extract all tweets with at least one sentiment vote.
 
-    Return an iterator of Tweet objects.
+    Return a list of Tweet objects.
     """
 
     tweets = {}
@@ -43,11 +43,9 @@ def extract():
     cursor.close()
     conn.close()
 
-    return tweets.itervalues()
+    return tweets.values()
 
 if __name__ == '__main__':
     # dump results to standard out
     for tweet in extract():
         pickle.dump(tweet, sys.stdout)
-
-    
