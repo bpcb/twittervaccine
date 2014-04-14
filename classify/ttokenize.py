@@ -30,7 +30,7 @@ def tokenize(text):
     it1 = text.split()
     it2 = (x.lower() for x in it1)
     it3 = (remove_punctuation(x) for x in it2)
-    it4 = (stemmer.stem(x) for x in it3)
+    it4 = [stemmer.stem(x) for x in it3]
 
     return it4
 
