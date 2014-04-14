@@ -24,11 +24,11 @@ def get_instances(tweets):
     """Return a list of (feature_dictionary, label) tuples."""
     return [get_instance(tweet) for tweet in tweets]
 
-def train_nltk_naive_bayes(tweets):
+def train_nltk(module, tweets):
     instances = get_instances(tweets)
-    return nltk.classify.NaiveBayesClassifier.train(instances)
+    return module.train(instances)
 
-def test_nltk_naive_bayes(classifier, tweets):
+def test_nltk(classifier, tweets):
     references = []
     predictions = []
     for tweet in tweets:
@@ -62,14 +62,14 @@ def main():
     test_set = tweets[:test_set_size]
     training_set = tweets[test_set_size:]
 
-    classifier = train_nltk_naive_bayes(training_set)
+    classifier = train_nltk(nltk.classify.NaiveBayesClassifier, training_set)
     tm2 = time.time()
 
     print('  time=%0.3fs' % (tm2 - tm1))
 
     print('Testing accuracy on %d tweets' % test_set_size)
     tm1 = time.time()
-    mat = test_nltk_naive_bayes(classifier, test_set)
+    mat = test_nltk(classifier, test_set)
     tm2 = time.time()
 
     print mat.pp(show_percents=True)
