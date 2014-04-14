@@ -2,33 +2,42 @@
 
 """Tweet sentiment analysis."""
 
+import collections
 import random
 import sys
 import time
 
+import nltk
 import nltk.classify
 
 import ttokenize
 from extract import *
 from tweet import *
 
-def prepare_nltk_naive_bayes_data(tweets):
-    """Return a list of (feature_dictionary, label) tuples."""
+def get_instance(tweet):
+    """Return a tuple of (feature_dictionary, label)."""
+    toks = ttokenize.tokenize(tweet.text)
+    feature_dict = dict([(t, True) for t in toks])
+    return (feature_dict, tweet.get_majority_vote())
 
-    instances = []
-    for tweet in tweets:
-        toks = ttokenize.tokenize(tweet.text)
-        feature_dict = dict([(t, True) for t in toks])
-        instances.append((feature_dict, tweet.get_majority_vote()))
-    return instances
+def get_instances(tweets):
+    """Return a list of (feature_dictionary, label) tuples."""
+    return [get_instance(tweet) for tweet in tweets]
 
 def train_nltk_naive_bayes(tweets):
-    instances = prepare_nltk_naive_bayes_data(tweets)
+    instances = get_instances(tweets)
     return nltk.classify.NaiveBayesClassifier.train(instances)
 
 def test_nltk_naive_bayes(classifier, tweets):
-    instances = prepare_nltk_naive_bayes_data(tweets)
-    return nltk.classify.accuracy(classifier, instances)
+    references = []
+    predictions = []
+    for tweet in tweets:
+        features, label = get_instance(tweet)
+        references.append(label)
+
+        predictions.append(classifier.classify(features))
+
+    return nltk.ConfusionMatrix(references, predictions)
 
 TEST_SET_PROPORTION = .2
 
@@ -60,10 +69,12 @@ def main():
 
     print('Testing accuracy on %d tweets' % test_set_size)
     tm1 = time.time()
-    ac = test_nltk_naive_bayes(classifier, test_set)
+    mat = test_nltk_naive_bayes(classifier, test_set)
     tm2 = time.time()
 
-    print('Accuracy=%f' % ac)
+    print mat.pp(show_percents=True)
+    print ('%d of %d correct ==> %f%%' % (mat._correct, mat._total,
+                                          float(mat._correct) / mat._total))
     print('  time=%0.3fs' % (tm2 - tm1))
 
 if __name__ == '__main__':
