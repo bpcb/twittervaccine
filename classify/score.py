@@ -12,6 +12,39 @@ import string
 # characters are used by AFINN_111
 PUNCTUATION = '!"#$%&()*+,./:;<=>?@[\\]^_`{|}~'
 
+# hand-crafted sentiment scores for vaccine sentiment;
+# all values are negative
+VACCINE_SCORES = {
+    "shouldn't" : -2,
+    "should not": -2,
+    "must not": -2,
+    "mustn't": -2,
+    "don't": -1,
+    "do not": -2,
+    "won't": -2,
+    "will not": -2,
+    "renounce": -1,
+    "renounced": -1,
+    "renounces": -1,
+    "boycott": -3,
+    "refuse": -3,
+    "mandatory": -1,
+    "forced": -3,
+    "forces": -3,
+    "forcing": -3,
+    "coerce": -4,
+    "coerced": -4,
+    "coercing": -4,
+    "required": -1,
+    "requires": -1,
+    "have to": -1,
+    "avoid": -1,
+    "never": -1,
+    "not vaccinating": -3,
+    "not vaccinated": -3,
+    "not vaccinate": -3,
+}
+
 def get_tokens(s):
     """Convert a string into a list of normalized tokens."""
 
@@ -37,6 +70,17 @@ class SentimentScorer(object):
 
                 d = ws.ngrams[len(words)]
                 d[tuple(words)] = score
+
+        return ws
+
+    @classmethod
+    def from_vaccine_phrases(cls):
+        ws = cls()
+
+        for phrase, score in VACCINE_SCORES.iteritems():
+            key = tuple(phrase.split())
+            d = ws.ngrams[len(key)]
+            d[key] = score
 
         return ws
 
