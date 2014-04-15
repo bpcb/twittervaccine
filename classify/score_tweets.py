@@ -3,7 +3,7 @@
 import extract
 import score
 
-scorer = score.SentimentScorer.from_vaccine_phrases()
+scorer = score.SentimentScorer.from_afinn_111()
 
 total = 0
 negative = 0
