@@ -15,6 +15,23 @@ def get_database_connection():
     conn = MySQLdb.connect(host='localhost', user='root', db='vaccine')
     return conn
 
+def extract_text(limit=0):
+    """Extract (tweet_id, text) from the database.
+
+    If limit is non-zero, return this many tuples.
+    """
+    conn = get_database_connection()
+    cursor = conn.cursor()
+
+    sql = 'SELECT T.id, T.text FROM tweets_tweet AS T '
+    sql += 'WHERE EXISTS (SELECT * FROM vote_count AS V WHERE T.id=V.tweet_id)'
+    cursor.execute(sql)
+
+    if limit > 0:
+        return cursor.fetchmany(limit)
+    else:
+        return cursor.fetchall()
+
 def extract():
     """Extract all tweets with at least one sentiment vote.
 
