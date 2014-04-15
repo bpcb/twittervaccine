@@ -61,5 +61,5 @@ class SentimentScorer(object):
 
 if __name__ == '__main__':
     scorer =  SentimentScorer.from_afinn_111()
-    p1 = "This is Buoyant but I _CAN't staNd_ it!!!"
-    print scorer.get_document_score(p1, False)
+    print scorer.ngrams[3]
+    print scorer.ngrams[2]
