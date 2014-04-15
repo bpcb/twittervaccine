@@ -57,7 +57,10 @@ class SentimentScorer(object):
             score += phrase_score
             idx += phrase_length
 
-        return score
+        if normalize:
+            return float(score) / len(toks)
+        else:
+            return score
 
 if __name__ == '__main__':
     scorer =  SentimentScorer.from_afinn_111()
