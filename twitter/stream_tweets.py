@@ -1,15 +1,19 @@
+#!/usr/bin/env python
+
 from tweepy import StreamListener
+import os
 import time, tweepy, sys
-import json, time, sys
+import json
+
+def get_output_file_path():
+    return 'tweets_' + time.strftime('%Y%m%d-%H%M%S') + '.json'
 
 class SListener(StreamListener):
 
-    def __init__(self, api = None, fprefix = 'streamer'):
+    def __init__(self, api = None):
         self.api = api or API()
         self.counter = 0
-        self.fprefix = fprefix
-        self.output  = open(fprefix + '.' 
-                            + time.strftime('%Y%m%d-%H%M%S') + '.json', 'w')
+        self.output  = open(get_output_file_path(), 'w')
         self.delout  = open('delete.txt', 'a')
 
     def on_data(self, data):
@@ -35,8 +39,7 @@ class SListener(StreamListener):
 
         if self.counter >= 20000:
             self.output.close()
-            self.output = open('../streaming_data/' + self.fprefix + '.' 
-                               + time.strftime('%Y%m%d-%H%M%S') + '.json', 'w')
+            self.output = open(get_output_file_path(), 'w')
             self.counter = 0
 
         return
@@ -70,14 +73,15 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
 def main():
+    os.chdir('/mnt')
     track = ['vaccination', 'vaccine', 'vaccinated', 'vaccinate', 'vaccinating', 'immunized', 'immunization', 'immunizing']
  
-    listen = SListener(api, 'myprefix')
+    listen = SListener(api)
     stream = tweepy.Stream(auth, listen)
 
     print "Streaming started..."
 
-    try: 
+    try:
         stream.filter(track = track)
     except:
         print "error!"
