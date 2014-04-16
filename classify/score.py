@@ -40,7 +40,7 @@ VACCINE_SCORES = {
     "have to": -1,
     "avoid": -1,
     "never": -1,
-    "untested", -1,
+    "untested": -1,
     "poison": -3,
     "not necessary": -1,
     "not vaccinating": -3,
