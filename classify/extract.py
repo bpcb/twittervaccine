@@ -16,15 +16,14 @@ def get_database_connection():
     return conn
 
 def extract_text(limit=0):
-    """Extract (tweet_id, text) from the database.
+    """Extract (tweet_id, text) from the database for all tweets.
 
     If limit is non-zero, return this many tuples.
     """
     conn = get_database_connection()
     cursor = conn.cursor()
 
-    sql = 'SELECT T.id, T.text FROM tweets_tweet AS T '
-    sql += 'WHERE EXISTS (SELECT * FROM vote_count AS V WHERE T.id=V.tweet_id)'
+    sql = 'SELECT id, text FROM tweets_tweet'
     cursor.execute(sql)
 
     if limit > 0:
