@@ -40,5 +40,5 @@ def git_current_revision():
     return subprocess.check_output(['git', 'rev-parse', 'HEAD'])
 
 if __name__ == '__main__':
-    print git_current_revision()
+    print git_current_revision(),
 
