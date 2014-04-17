@@ -3,7 +3,7 @@
 import subprocess
 import sys
 
-"""Functionality to determine if the local git repo is "clean"."""
+"""Functionality to determine to query the state of a local git repository."""
 
 def git_clean():
     """Return True if all changes have been committed.
@@ -31,9 +31,14 @@ def git_clean():
 
     return True
 
+def git_current_revision():
+    """Return the current git revision.
+
+    Raise an error if the repository is not clean.
+    """
+    assert git_clean()
+    return subprocess.check_output(['git', 'rev-parse', 'HEAD'])
+
 if __name__ == '__main__':
-    if git_clean():
-        sys.exit(0)
-    else:
-        sys.exit(1)
+    print git_current_revision()
 
