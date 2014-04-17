@@ -14,7 +14,7 @@ def get_database_connection():
 
 CREATE_SQL = """
 CREATE TABLE IF NOT EXISTS sentiment_score(
-  tweet_id BIGINT, algorithm SMALLINT, revision VARCHAR(20), result FLOAT,
+  tweet_id BIGINT, algorithm SMALLINT, revision VARCHAR(64), result FLOAT,
   PRIMARY KEY (tweet_id, algorithm, revision));
 """
 
