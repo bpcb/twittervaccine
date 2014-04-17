@@ -3,7 +3,7 @@
 import subprocess
 import sys
 
-"""Functionality to determine to query the state of a local git repository."""
+"""Functionality to query the state of a local git repository."""
 
 def git_clean():
     """Return True if all changes have been committed.
