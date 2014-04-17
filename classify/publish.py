@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS sentiment_score(
 
 INSERT_SQL = """
 INSERT INTO sentiment_score(tweet_id, algorithm, revision, result)
-VALUES """
+VALUES (%s, %s, %s, %s);"""
 
 def publish_sentiment(algorithm, tweets):
     """Store a list of sentiment analysis results into the data base.
@@ -40,9 +40,8 @@ def publish_sentiment(algorithm, tweets):
     cursor = conn.cursor()
     cursor.execute(CREATE_SQL)
 
-    val_strs = ['(%d, %f)' % (_id, score) for (_id, score) in tweets]
-    sql = INSERT_SQL + ','.join(val_strs)
-    cursor.execute(sql)
+    for _id, score in tweets:
+        cursor.execute(INSERT_SQL, [_id, algo, rev, score])
 
     conn.commit()
     cursor.close()
