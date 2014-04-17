@@ -24,7 +24,8 @@ def git_clean():
         return False
 
     # Check for untracked files
-    x = subprocess.check_output(['git', 'ls-files', '--others'])
+    x = subprocess.check_output(['git', 'ls-files', '--others',
+                                 '--exclude-standard'])
     if x:
         sys.stderr.write("Untracked files: %s" % x)
         return False
