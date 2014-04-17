@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from geopy import geocoders, point
 import csv
 from time import sleep
