@@ -11,6 +11,7 @@ import sys
 
 from tweet import *
 from tweeter import *
+from geocode import *
 
 def get_database_connection():
     conn = MySQLdb.connect(host='localhost', user='root', db='vaccine')
@@ -91,7 +92,7 @@ if __name__ == '__main__':
 	users = extract_tweeters()
 
         for user in users:
-            print user.location
+            print Geocode.query(user.location)
 	
     # for tweet in extract():
 
