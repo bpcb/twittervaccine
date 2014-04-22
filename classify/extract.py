@@ -10,6 +10,7 @@ import pickle
 import sys
 
 from tweet import *
+from tweeter import *
 
 def get_database_connection():
     conn = MySQLdb.connect(host='localhost', user='root', db='vaccine')
@@ -76,11 +77,22 @@ def extract_tweeters():
 		if location_string is not None:
 			user = users.get(twitter_user_id, Tweeter(twitter_user_id))
 			user.location = location_string
-			# print user.location
+			user.user_name = user_name
+
+                        users[twitter_user_id] = user
+        
+        cursor.close()
+        conn.close()
+
+        return users.values()
 
 if __name__ == '__main__':
     # dump results to standard out
-	extract_tweeters()
+	users = extract_tweeters()
+
+        for user in users:
+            print user.location
 	
     # for tweet in extract():
+
         # pickle.dump(tweet, sys.stdout)
