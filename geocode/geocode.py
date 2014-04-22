@@ -27,7 +27,7 @@ class Geocode(object):
 		
 		result = None
 		if statement.results is not None:
-			result = statement.results['Result']['city']
+			result = statement.results['Result']
 			print result
 		sleep(1)
 		
