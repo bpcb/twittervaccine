@@ -73,7 +73,7 @@ def extract_tweeters():
 	cursor.execute('SELECT user_name, twitter_user_id, location_string FROM tweeter_tweeter LIMIT 10')
 	
 	for user_name, twitter_user_id, location_string in cursor.fetchall():
-		print location
+		print location_string
 
 if __name__ == '__main__':
     # dump results to standard out
