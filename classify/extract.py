@@ -5,17 +5,17 @@
 ./extract.py > file
 """
 
-import MySQLdb
 import pickle
 import sys
+
+# Hack: append common/ to sys.path
+sys.path.append("../common")
 
 from tweet import *
 from tweeter import *
 from geocode import *
 
-def get_database_connection():
-    conn = MySQLdb.connect(host='localhost', user='root', db='vaccine')
-    return conn
+from db import get_database_connection
 
 def extract_text(limit=0):
     """Extract (tweet_id, text) from the database for all tweets.

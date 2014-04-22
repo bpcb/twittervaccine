@@ -2,15 +2,16 @@
 
 """Publish sentiment data to the database."""
 
-import MySQLdb
+import sys
+
+# Hack: append common/ to sys.path
+sys.path.append("../common")
+
 import git_rev
+from db import get_database_connection
 
 # mapping from algorithm name to code; this really should be stored in the database
 ALGORITHMS = { 'vsps': 1, 'afinn111' : 2, 'test': 999}
-
-def get_database_connection():
-    conn = MySQLdb.connect(host='localhost', user='root', db='vaccine')
-    return conn
 
 CREATE_SQL = """
 CREATE TABLE IF NOT EXISTS sentiment_score(
