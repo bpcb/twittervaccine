@@ -73,7 +73,9 @@ def extract_tweeters():
 	cursor.execute('SELECT user_name, twitter_user_id, location_string FROM tweeter_tweeter LIMIT 10')
 	
 	for user_name, twitter_user_id, location_string in cursor.fetchall():
-		print location_string
+		if location_string is not None:
+			user = user.get(user_name, Tweet(user_name, twitter_user_id, location_string))
+			print user.location_string
 
 if __name__ == '__main__':
     # dump results to standard out
