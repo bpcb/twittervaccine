@@ -38,7 +38,7 @@ def git_current_revision():
     Raise an error if the repository is not clean.
     """
     assert git_clean()
-    return subprocess.check_output(['git', 'rev-parse', 'HEAD'])
+    return subprocess.check_output(['git', 'rev-parse', 'HEAD']).strip()
 
 if __name__ == '__main__':
     print git_current_revision(),
