@@ -60,8 +60,24 @@ def extract():
     conn.close()
 
     return tweets.values()
+	
+def extract_tweeters():
+	"""
+	Extract all users with geographic information.
+	"""
+	
+	users = {}
+	
+	conn = get_database_connection()
+	cursor = conn.cursor()
+	cursor.execute('SELECT user_name, twitter_user_id, location_string FROM tweeter_tweeter LIMIT 10')
+	
+	for user_name, twitter_user_id, location_string in cursor.fetchall():
+		print location
 
 if __name__ == '__main__':
     # dump results to standard out
-    for tweet in extract():
-        pickle.dump(tweet, sys.stdout)
+	extract_tweeters()
+	
+    # for tweet in extract():
+        # pickle.dump(tweet, sys.stdout)
