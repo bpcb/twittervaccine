@@ -3,11 +3,24 @@
 from time import sleep
 import yql
 
-reverse_identifiers = ['\xc3\x9cT:', 'iPhone:']
+#These are identifiers that sometimes preprend lat, long strings
+REVERSE_IDENTIFIERS = ['\xc3\x9cT:', 'iPhone:']
+
+#These stop words taken from Lucene's StopAnalyzer.java class. 
+#Extra word: 'here' added, because strangely enough this resolves to somewhere in 
+#India.
+LUCENE_STOP_WORDS = [
+	'a', 'and', 'are', 'as', 'at', 
+	'be', 'but', 'by', 'for', 'if', 
+	'in', 'into', 'is', 'it', 'no', 'not', 
+	'of', 'on', 'or', 'such', 'that', 'the',
+	'their', 'then', 'there', 'these', 'they', 
+	'this', 'to', 'was', 'will', 'with', 'here',
+]
 
 class Geocode(object):
 	def __init__(self, location):
-		self.results = None
+		self.results = {}
 		self.location = location
 	
 	def connect(self):
@@ -20,15 +33,20 @@ class Geocode(object):
 		
 	def query(self):
 		conn = self.connect()
-		
+		location_stripped = self.strip()
+
 		q = 'SELECT * FROM geo.placefinder WHERE text = @text'
 		statement = conn.execute(q, {"text": self.location})
-		print "String location:", self.location
 		
+		print location_stripped
 		result = None
-		if statement.results is not None:
-			result = statement.results['Result']
-			print result
+		if statement.results is not None and isinstance(statement.results['Result'], (dict)):
+			for i in statement.results['Result']:
+				self.results[i] = statement.results['Result'][i]	
+		else:
+			print "multiple results!"
+			for i in statement.results['Result'][1]:
+				self.results[i] = statement.results['Result'][1][i]
 		sleep(1)
 		
 		return result
@@ -39,18 +57,21 @@ class Geocode(object):
 		indicate the location is a pair of lat, long coordinates.
 		"""
 		conn = self.connect()
-		location_stripped = self.strip_reverse_identifiers()		
+		location_stripped = self.strip()	
 
 		q = 'SELECT * FROM geo.placefinder WHERE text = @text '
 		q += 'AND gflags = \"R\"'
-		print q
 		statement = conn.execute(q, {"text": location_stripped})
-		print "String location:", location_stripped
-	
+		
+		print location_stripped
 		result = None
-		if statement.results is not None:
+		if statement.results is not None and isinstance(statement.results['Result'], (dict)):
 			for i in statement.results['Result']:
-				print statement.results['Result'][i]
+				self.results[i] = statement.results['Result'][i]
+		else:
+			print "multiple results!"
+			for i in statement.results['Result'][1]:
+				self.results[i] = statement.results['Result'][1][i]
 		sleep(1)
 		
 		return result	
@@ -63,7 +84,7 @@ class Geocode(object):
 		
 		loc_words = self.location.split()
 		for word in loc_words:
-			for id in reverse_identifiers:
+			for id in REVERSE_IDENTIFIERS:
 				if word == id:
 					return True
 		
@@ -72,11 +93,13 @@ class Geocode(object):
 	def remove_stop_words(self):
 		pass
 
-	def strip_reverse_identifiers(self):
+	def strip(self):
 		loc_words = self.location.split()
-		no_rev_ids = [word for word in loc_words if word not in reverse_identifiers]
+
+		no_rev_ids = [word for word in loc_words if word not in REVERSE_IDENTIFIERS]
+		no_stop_words = [word for word in no_rev_ids if word not in LUCENE_STOP_WORDS] 
 		
-		return " ".join(no_rev_ids)
+		return " ".join(no_stop_words)
 
 
 	

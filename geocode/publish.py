@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS user_locations(
 	PRIMARY KEY (twitter_user_id));
 """
 
+values = "(" + "%s, "*28 + "%s)" 
 INSERT_SQL = """
 INSERT INTO user_locations(
 	(twitter_user_id,
@@ -74,22 +75,17 @@ INSERT INTO user_locations(
 	hash,
 	woeid,
 	woetype)
-	VALUES (%s, %s, %s, %s);
+	VALUES 
 """
+INSERT_SQL += values
 
-def publish_sentiment(algorithm, tweets):
+def publish_locations(location, tweets):
     """Store a list of sentiment analysis results into the data base.
 
     :param algorithm: The algorithm used to classify tweets; can be a string or
     or an integer.
     :param tweets: An iterable list of (tweet_id, sentiment_score) tuples.
-    """
-
-    rev = git_rev.git_current_revision()
-    if isinstance(algorithm, str):
-        algo = ALGORITHMS[algorithm]
-    else:
-        algo = algorithm
+    ""
 
     conn = get_database_connection()
     cursor = conn.cursor()
@@ -104,6 +100,6 @@ def publish_sentiment(algorithm, tweets):
 
 if __name__ == '__main__':
     # create some dummy test data
-    tweets = [(1, -.9), (2, -.3), (3, .7), (4, 0.0), (5, 1.1)]
-    publish_sentiment('test', tweets)
-
+    # tweets = [(1, -.9), (2, -.3), (3, .7), (4, 0.0), (5, 1.1)]
+    # publish_sentiment('test', tweets)
+	print INSERT_SQL
