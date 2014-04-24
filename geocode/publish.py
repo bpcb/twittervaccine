@@ -9,6 +9,7 @@ sys.path.append("../common")
 
 from db import get_database_connection
 
+DELETE_SQL = "DROP TABLE IF EXISTS user_locations"
 CREATE_SQL = """
 CREATE TABLE IF NOT EXISTS user_locations(
 	twitter_user_id BIGINT,
@@ -35,7 +36,7 @@ CREATE TABLE IF NOT EXISTS user_locations(
 	county VARCHAR(64),
 	countrycode VARCHAR(64),
 	statecode VARCHAR(64),
-	countrycode VARCHAR(64),
+	countycode VARCHAR(64),
 	uzip VARCHAR(64),
 	hash VARCHAR(64),
 	woeid VARCHAR(64),
@@ -70,7 +71,7 @@ INSERT INTO user_locations(
 	county,
 	countrycode,
 	statecode,
-	countrycode,	
+	countycode,	
 	uzip,
 	hash,
 	woeid,
@@ -79,20 +80,21 @@ INSERT INTO user_locations(
 """
 INSERT_SQL += values
 
-def publish_locations(location, tweets):
-    """Store a list of sentiment analysis results into the data base.
+def create_locations_table():
+	conn = get_database_connection()
+	cursor = conn.cursor()
+	cursor.execute(DELETE_SQL)
+	cursor.execute(CREATE_SQL)
+	
+	conn.commit()
+	cursor.close()
+	conn.close()
 
-    :param algorithm: The algorithm used to classify tweets; can be a string or
-    or an integer.
-    :param tweets: An iterable list of (tweet_id, sentiment_score) tuples.
-    ""
-
+def publish_location(location):
     conn = get_database_connection()
     cursor = conn.cursor()
-    cursor.execute(CREATE_SQL)
 
-    for _id, score in tweets:
-        cursor.execute(INSERT_SQL, [_id, algo, rev, score])
+    cursor.execute(INSERT_SQL, location)
 
     conn.commit()
     cursor.close()
@@ -102,4 +104,4 @@ if __name__ == '__main__':
     # create some dummy test data
     # tweets = [(1, -.9), (2, -.3), (3, .7), (4, 0.0), (5, 1.1)]
     # publish_sentiment('test', tweets)
-	print INSERT_SQL
+	create_locations_table()	

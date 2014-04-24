@@ -22,6 +22,7 @@ class Geocode(object):
 	def __init__(self, location):
 		self.results = {}
 		self.location = location
+		self.stop_words_count = len([word for words in self.location.split() if word in LUCENE_STOP_WORDS])	
 	
 	def connect(self):
 		api_key = 'dj0yJmk9NWM0azdWc0xWMTZJJmQ9WVdrOU5qTkJUbTlxTjJjbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD0wMQ--'
@@ -40,16 +41,17 @@ class Geocode(object):
 		
 		print location_stripped
 		result = None
-		if statement.results is not None and isinstance(statement.results['Result'], (dict)):
+		if statement.results is None:
+			print "no results!"
+		elif isinstance(statement.results['Result'], (dict)):
+			print "one result!"
 			for i in statement.results['Result']:
 				self.results[i] = statement.results['Result'][i]	
 		else:
 			print "multiple results!"
-			for i in statement.results['Result'][1]:
-				self.results[i] = statement.results['Result'][1][i]
+			for i in statement.results['Result'][0]:
+				self.results[i] = statement.results['Result'][0][i]
 		sleep(1)
-		
-		return result
 
 	def reverse_query(self):
 		"""
@@ -65,16 +67,18 @@ class Geocode(object):
 		
 		print location_stripped
 		result = None
-		if statement.results is not None and isinstance(statement.results['Result'], (dict)):
+		if statement.results is None:
+			print "no results!"
+		elif isinstance(statement.results['Result'], (dict)):
+			print "one result!"
 			for i in statement.results['Result']:
 				self.results[i] = statement.results['Result'][i]
 		else:
 			print "multiple results!"
-			for i in statement.results['Result'][1]:
-				self.results[i] = statement.results['Result'][1][i]
+			for i in statement.results['Result'][0]:
+				self.results[i] = statement.results['Result'][0][i]
 		sleep(1)
-		
-		return result	
+			
 
 	def identify_gps(self):
 		"""
@@ -89,10 +93,7 @@ class Geocode(object):
 					return True
 		
 		return False
-
-	def remove_stop_words(self):
-		pass
-
+	
 	def strip(self):
 		loc_words = self.location.split()
 

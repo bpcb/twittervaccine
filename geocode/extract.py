@@ -23,7 +23,7 @@ def extract_tweeters():
 	
 	conn = get_database_connection()
 	cursor = conn.cursor()
-	cursor.execute('SELECT user_name, twitter_user_id, location_string FROM tweeter_tweeter LIMIT 10')
+	cursor.execute('SELECT user_name, twitter_user_id, location_string FROM tweeter_tweeter LIMIT 25')
 	
 	for user_name, twitter_user_id, location_string in cursor.fetchall():
 		if location_string is not None:
@@ -48,3 +48,4 @@ if __name__ == '__main__':
 			u.reverse_query()
 		else:
 			u.query()
+		
