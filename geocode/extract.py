@@ -13,6 +13,7 @@ sys.path.append("../common")
 from tweeter import *
 from geocode import *
 from db import get_database_connection
+from insert_dict import *
      	
 def extract_tweeters():
 	"""
@@ -48,4 +49,7 @@ if __name__ == '__main__':
 			u.reverse_query()
 		else:
 			u.query()
-		
+		u.results['user_name'] = user.user_name
+		u.results['twitter_user_id'] = user.user_id
+		u.results['stop_words_count'] = u.stop_words_count
+		insert_record(u.results, "user_locations")

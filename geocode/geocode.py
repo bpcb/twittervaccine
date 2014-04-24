@@ -22,7 +22,7 @@ class Geocode(object):
 	def __init__(self, location):
 		self.results = {}
 		self.location = location
-		self.stop_words_count = len([word for words in self.location.split() if word in LUCENE_STOP_WORDS])	
+		self.stop_words_count = len([word for word in self.location.split() if word in LUCENE_STOP_WORDS])	
 	
 	def connect(self):
 		api_key = 'dj0yJmk9NWM0azdWc0xWMTZJJmQ9WVdrOU5qTkJUbTlxTjJjbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD0wMQ--'

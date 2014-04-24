@@ -34,6 +34,8 @@ CREATE TABLE IF NOT EXISTS user_locations(
 	neighborhood VARCHAR(64),
 	city VARCHAR(64),
 	county VARCHAR(64),
+	state VARCHAR(64),
+	country VARCHAR(64), 
 	countrycode VARCHAR(64),
 	statecode VARCHAR(64),
 	countycode VARCHAR(64),
@@ -44,42 +46,6 @@ CREATE TABLE IF NOT EXISTS user_locations(
 	PRIMARY KEY (twitter_user_id));
 """
 
-values = "(" + "%s, "*28 + "%s)" 
-INSERT_SQL = """
-INSERT INTO user_locations(
-	(twitter_user_id,
-	user_name,
-	quality,
-	latitude,
-	longitude,
-	offsetlat,
-	offsetlon,
-	radius,
-	name,
-	line1,
-	line2,
-	line3,
-	line4,
-	house,
-	street,
-	xstreet,
-	unittype,
-	unit,
-	postal,
-	neighborhood,
-	city,
-	county,
-	countrycode,
-	statecode,
-	countycode,	
-	uzip,
-	hash,
-	woeid,
-	woetype)
-	VALUES 
-"""
-INSERT_SQL += values
-
 def create_locations_table():
 	conn = get_database_connection()
 	cursor = conn.cursor()
@@ -89,16 +55,6 @@ def create_locations_table():
 	conn.commit()
 	cursor.close()
 	conn.close()
-
-def publish_location(location):
-    conn = get_database_connection()
-    cursor = conn.cursor()
-
-    cursor.execute(INSERT_SQL, location)
-
-    conn.commit()
-    cursor.close()
-    conn.close()
 
 if __name__ == '__main__':
     # create some dummy test data
