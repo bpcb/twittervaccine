@@ -42,7 +42,9 @@ CREATE TABLE IF NOT EXISTS user_locations(
 	uzip VARCHAR(64),
 	hash VARCHAR(64),
 	woeid VARCHAR(64),
-	woetype VARCHAR(64),	
+	woetype VARCHAR(64),
+	stop_words_count SMALLINT,
+	number_of_results SMALLINT,	
 	PRIMARY KEY (twitter_user_id));
 """
 
@@ -57,7 +59,4 @@ def create_locations_table():
 	conn.close()
 
 if __name__ == '__main__':
-    # create some dummy test data
-    # tweets = [(1, -.9), (2, -.3), (3, .7), (4, 0.0), (5, 1.1)]
-    # publish_sentiment('test', tweets)
 	create_locations_table()	

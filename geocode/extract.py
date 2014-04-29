@@ -24,7 +24,7 @@ def extract_tweeters():
 	
 	conn = get_database_connection()
 	cursor = conn.cursor()
-	cursor.execute('SELECT user_name, twitter_user_id, location_string FROM tweeter_tweeter LIMIT 25')
+	cursor.execute('SELECT user_name, twitter_user_id, location_string FROM tweeter_tweeter')
 	
 	for user_name, twitter_user_id, location_string in cursor.fetchall():
 		if location_string is not None:
@@ -44,12 +44,15 @@ if __name__ == '__main__':
 
 	
         for user in users:
-		u = Geocode(user.location)
-		if u.identify_gps() == True:
-			u.reverse_query()
-		else:
-			u.query()
-		u.results['user_name'] = user.user_name
-		u.results['twitter_user_id'] = user.user_id
-		u.results['stop_words_count'] = u.stop_words_count
-		insert_record(u.results, "user_locations")
+		try:
+			u = Geocode(user.location)
+			if u.identify_gps() == True:
+				u.reverse_query()
+			else:
+				u.query()
+				u.results['user_name'] = user.user_name
+				u.results['twitter_user_id'] = user.user_id
+				u.results['stop_words_count'] = u.stop_words_count
+			insert_record(u.results, "user_locations")
+		except:
+			print "Unexpected error:", sys.exc_info()[0]

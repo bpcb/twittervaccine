@@ -42,16 +42,15 @@ class Geocode(object):
 		print location_stripped
 		result = None
 		if statement.results is None:
-			print "no results!"
+			self.results["number_of_results"] = 0
 		elif isinstance(statement.results['Result'], (dict)):
-			print "one result!"
+			self.results["number_of_results"] = 1
 			for i in statement.results['Result']:
 				self.results[i] = statement.results['Result'][i]	
 		else:
-			print "multiple results!"
+			self.results["number_of_results"] = len(statement.results['Result'])
 			for i in statement.results['Result'][0]:
 				self.results[i] = statement.results['Result'][0][i]
-		sleep(1)
 
 	def reverse_query(self):
 		"""
@@ -68,16 +67,15 @@ class Geocode(object):
 		print location_stripped
 		result = None
 		if statement.results is None:
-			print "no results!"
+			self.results['number_of_results'] = 0
 		elif isinstance(statement.results['Result'], (dict)):
-			print "one result!"
+			self.results['number_of_results'] = 1
 			for i in statement.results['Result']:
 				self.results[i] = statement.results['Result'][i]
 		else:
-			print "multiple results!"
+			self.results['number_of_results'] = len(statement.results['Result'])
 			for i in statement.results['Result'][0]:
 				self.results[i] = statement.results['Result'][0][i]
-		sleep(1)
 			
 
 	def identify_gps(self):
