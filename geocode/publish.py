@@ -12,14 +12,14 @@ from db import get_database_connection
 DELETE_SQL = "DROP TABLE IF EXISTS user_locations"
 CREATE_SQL = """
 CREATE TABLE IF NOT EXISTS user_locations(
-	id BIGINT,
+	id INT,
 	user_name VARCHAR(64), 
-	quality SMALLINT,
+	quality INT,
 	latitude FLOAT,
 	longitude FLOAT,
 	offsetlat FLOAT,
 	offsetlon FLOAT,
-	radius SMALLINT,
+	radius INT,
 	name VARCHAR(64),
 	line1 VARCHAR(64),
 	line2 VARCHAR(64),
@@ -43,8 +43,8 @@ CREATE TABLE IF NOT EXISTS user_locations(
 	hash VARCHAR(64),
 	woeid VARCHAR(64),
 	woetype VARCHAR(64),
-	stop_words_count SMALLINT,
-	number_of_results SMALLINT,	
+	stop_words_count INT,
+	number_of_results INT,	
 	PRIMARY KEY (id));
 """
 
