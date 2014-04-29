@@ -24,7 +24,7 @@ def insert_record(record, table):
 	key_str = ','.join(keys)
 	val_str = ','.join(['%s'] * num_cols)
 
-	qry = "INSERT INTO %s (%s) VALUES (%s)" % (table, key_str, val_str)
+	qry = "REPLACE INTO %s (%s) VALUES (%s)" % (table, key_str, val_str)
 	cursor.execute(qry, vals)
 
 	conn.commit()
