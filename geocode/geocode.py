@@ -47,7 +47,6 @@ class Geocode(object):
 			self.results["number_of_results"] = 1
 			for i in statement.results['Result']:
 				self.results[i] = statement.results['Result'][i]	
-			print self.results
 		else:
 			self.results["number_of_results"] = len(statement.results['Result'])
 			for i in statement.results['Result'][0]:

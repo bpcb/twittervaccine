@@ -49,10 +49,12 @@ if __name__ == '__main__':
 			if u.identify_gps() == True:
 				u.reverse_query()
 			else:
-				u.query()
-				u.results['user_name'] = user.user_name
-				u.results['id'] = user.id
-				u.results['stop_words_count'] = u.stop_words_count
-			insert_record(u.results, "user_locations")
-		except:
-			print "Unexpected error:", sys.exc_info()[0]
+                                u.query()
+
+                        u.results['user_name'] = user.user_name
+                        u.results['id'] = user.user_id
+                        u.results['stop_words_count'] = u.stop_words_count
+
+                        insert_record(u.results, "user_locations")
+                except:
+                        raise
