@@ -15,12 +15,12 @@ ALGORITHMS = { 'vsps': 1, 'afinn111' : 2, 'test': 999}
 
 CREATE_SQL = """
 CREATE TABLE IF NOT EXISTS sentiment_score(
-  tweet_id BIGINT, algorithm SMALLINT, revision VARCHAR(64), result FLOAT,
+  id INT, algorithm SMALLINT, revision VARCHAR(64), result FLOAT,
   PRIMARY KEY (tweet_id, algorithm, revision));
 """
 
 INSERT_SQL = """
-INSERT INTO sentiment_score(tweet_id, algorithm, revision, result)
+INSERT INTO sentiment_score(id, algorithm, revision, result)
 VALUES (%s, %s, %s, %s);"""
 
 def publish_sentiment(algorithm, tweets):
@@ -52,4 +52,3 @@ if __name__ == '__main__':
     # create some dummy test data
     tweets = [(1, -.9), (2, -.3), (3, .7), (4, 0.0), (5, 1.1)]
     publish_sentiment('test', tweets)
-
