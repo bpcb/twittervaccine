@@ -6,6 +6,7 @@
 """
 
 import sys
+import traceback
 
 # Hack: append common/ to sys.path
 sys.path.append("../common")
@@ -14,7 +15,7 @@ from tweeter import *
 from geocode import *
 from db import get_database_connection
 from insert_dict import *
-     	
+
 def extract_tweeters():
 	"""
 	Extract all users with geographic information.
@@ -57,4 +58,4 @@ if __name__ == '__main__':
 
                         insert_record(u.results, "user_locations")
                 except:
-                        raise
+                        traceback.print_exc(file=sys.stdout)
