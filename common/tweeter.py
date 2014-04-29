@@ -1,5 +1,5 @@
 class Tweeter(object):
-	def __init__(self, twitter_user_id):
-		self.user_id = twitter_user_id
+	def __init__(self, id):
+		self.user_id = id
 		self.user_name = None
 		self.location = None

@@ -12,7 +12,7 @@ from db import get_database_connection
 DELETE_SQL = "DROP TABLE IF EXISTS user_locations"
 CREATE_SQL = """
 CREATE TABLE IF NOT EXISTS user_locations(
-	twitter_user_id BIGINT,
+	id BIGINT,
 	user_name VARCHAR(64), 
 	quality SMALLINT,
 	latitude FLOAT,
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS user_locations(
 	woetype VARCHAR(64),
 	stop_words_count SMALLINT,
 	number_of_results SMALLINT,	
-	PRIMARY KEY (twitter_user_id));
+	PRIMARY KEY (id));
 """
 
 def create_locations_table():

@@ -24,15 +24,15 @@ def extract_tweeters():
 	
 	conn = get_database_connection()
 	cursor = conn.cursor()
-	cursor.execute('SELECT user_name, twitter_user_id, location_string FROM tweeter_tweeter')
+	cursor.execute('SELECT user_name, id, location_string FROM tweeter_tweeter')
 	
-	for user_name, twitter_user_id, location_string in cursor.fetchall():
+	for user_name, id, location_string in cursor.fetchall():
 		if location_string is not None:
-			user = users.get(twitter_user_id, Tweeter(twitter_user_id))
+			user = users.get(id, Tweeter(id))
 			user.location = location_string
 			user.user_name = user_name
 
-                        users[twitter_user_id] = user
+                        users[id] = user
         
         cursor.close()
         conn.close()
@@ -51,7 +51,7 @@ if __name__ == '__main__':
 			else:
 				u.query()
 				u.results['user_name'] = user.user_name
-				u.results['twitter_user_id'] = user.user_id
+				u.results['id'] = user.id
 				u.results['stop_words_count'] = u.stop_words_count
 			insert_record(u.results, "user_locations")
 		except:
