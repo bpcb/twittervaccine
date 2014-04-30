@@ -16,7 +16,7 @@ ALGORITHMS = { 'vsps': 1, 'afinn111' : 2, 'test': 999}
 CREATE_SQL = """
 CREATE TABLE IF NOT EXISTS sentiment_score(
   id INT, algorithm SMALLINT, revision VARCHAR(64), result FLOAT,
-  PRIMARY KEY (tweet_id, algorithm, revision));
+  PRIMARY KEY (id, algorithm, revision));
 """
 
 INSERT_SQL = """
