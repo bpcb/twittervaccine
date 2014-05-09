@@ -23,7 +23,7 @@ def extract_tweeters():
 	
 	users = {}
 	
-	conn = get_database_connection()
+	conn = get_database_connection(port = 2001)
 	cursor = conn.cursor()
 	cursor.execute('SELECT user_name, id, location_string FROM tweeter_tweeter')
 	
@@ -33,29 +33,28 @@ def extract_tweeters():
 			user.location = location_string
 			user.user_name = user_name
 
-                        users[id] = user
-        
-        cursor.close()
-        conn.close()
+						users[id] = user
+		
+		cursor.close()
+		conn.close()
 
-        return users.values()
+		return users.values()
 
 if __name__ == '__main__':
 	users = extract_tweeters()
 
-	
-        for user in users:
+	for user in users:
 		try:
 			u = Geocode(user.location)
 			if u.identify_gps() == True:
 				u.reverse_query()
 			else:
-                                u.query()
+				u.query()
 
-                        u.results['user_name'] = user.user_name
-                        u.results['id'] = user.user_id
-                        u.results['stop_words_count'] = u.stop_words_count
+				u.results['user_name'] = user.user_name
+				u.results['id'] = user.user_id
+				u.results['stop_words_count'] = u.stop_words_count
 
-                        insert_record(u.results, "user_locations")
-                except:
-                        traceback.print_exc(file=sys.stdout)
+				insert_record(u.results, "user_locations")
+		except:
+			traceback.print_exc(file=sys.stdout)

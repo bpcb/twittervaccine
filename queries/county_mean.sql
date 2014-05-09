@@ -4,5 +4,3 @@ select county, state, avg(result) AS avg_score, count(*) AS num_tweets FROM (
 group by county, state
 having count(*) > 50
 order by avg_score;
-
-
