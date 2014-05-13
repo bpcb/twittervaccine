@@ -5,7 +5,9 @@ CREATE TABLE vaccine.majority_vote_unique(tweet_id int, vote varchar(1), vote_co
 
 INSERT INTO vaccine.majority_vote_unique
 SELECT X.* FROM vaccine.majority_vote AS X
-WHERE NOT EXISTS (
-    SELECT * FROM vaccine.majority_vote AS Y
-    WHERE X.tweet_id=Y.tweet_id AND X.vote <> Y.vote
-    );
+JOIN (
+    SELECT tweet_id, count(*) AS count FROM vaccine.majority_vote AS Y
+    GROUP BY tweet_id
+) AS Y
+ON X.tweet_id = Y.tweet_id AND Y.count=1;
+
