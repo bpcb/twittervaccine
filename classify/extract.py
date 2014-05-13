@@ -36,35 +36,26 @@ def extract_classified_tweets(collapse_labels=True):
     """Extract all tweets with at least one sentiment vote.
 
     Tweets with ties in the majority vote count are omitted.
-    Return a list of Tweet objects.
-    """
 
-    tweets = {}
+    Return an iterator of tuples of the form (id, vote, text)
+    """
 
     conn = get_database_connection()
     cursor = conn.cursor()
-    cursor.execute('SELECT tweet_id, vote FROM majority_vote_unique')
+    query = 'SELECT V.tweet_id, V.vote, T.text FROM majority_vote_unique AS V'
+    query += ' JOIN tweets_tweet AS T ON V.tweet_id=T.id'
 
-    for _id, vote in cursor.fetchall():
-        tweet = tweets.get(_id, Tweet(_id))
-        tweet.majority_vote = vote
-        if collapse_labels and vote != '-':
-            tweet.majority_vote = 'X'
-        tweets[_id] = tweet
+    cursor.execute(query)
 
-    sql = 'SELECT T.id, T.text FROM tweets_tweet AS T '
-    sql += 'WHERE EXISTS (SELECT * FROM majority_vote_unique AS V WHERE T.id=V.tweet_id)'
-    cursor.execute(sql)
+    try:
+        for _id, vote, text in cursor.fetchall():
+            if collapse_labels and vote != '-':
+                vote = 'X'
+            yield (_id, vote, text)
+    finally:
+        cursor.close()
+        conn.close()
 
-    for _id, text in cursor.fetchall():
-        tweet = tweets[_id]
-        tweet.text = text
-
-    cursor.close()
-    conn.close()
-
-    return tweets.values()
-	
 def extract_tweeters():
 	"""
 	Extract all users with geographic information.
