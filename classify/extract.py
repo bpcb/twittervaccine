@@ -32,7 +32,7 @@ def extract_text(limit=0):
     else:
         return cursor.fetchall()
 
-def extract_classified_tweets():
+def extract_classified_tweets(collapse_labels=True):
     """Extract all tweets with at least one sentiment vote.
 
     Tweets with ties in the majority vote count are omitted.
@@ -48,6 +48,8 @@ def extract_classified_tweets():
     for _id, vote in cursor.fetchall():
         tweet = tweets.get(_id, Tweet(_id))
         tweet.majority_vote = vote
+        if collapse_labels and vote != '-':
+            tweet.majority_vote = 'X'
         tweets[_id] = tweet
 
     sql = 'SELECT T.id, T.text FROM tweets_tweet AS T '
