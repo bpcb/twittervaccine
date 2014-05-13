@@ -13,7 +13,6 @@ sys.path.append("../common")
 
 from tweet import *
 from tweeter import *
-from geocode import *
 
 from db import get_database_connection
 
@@ -33,9 +32,10 @@ def extract_text(limit=0):
     else:
         return cursor.fetchall()
 
-def extract():
+def extract_classified_tweets():
     """Extract all tweets with at least one sentiment vote.
 
+    Tweets with ties in the majority vote count are omitted.
     Return a list of Tweet objects.
     """
 
@@ -43,15 +43,15 @@ def extract():
 
     conn = get_database_connection()
     cursor = conn.cursor()
-    cursor.execute('SELECT tweet_id, vote, count FROM vote_count')
+    cursor.execute('SELECT tweet_id, vote FROM majority_vote_unique')
 
-    for _id, vote, count in cursor.fetchall():
+    for _id, vote in cursor.fetchall():
         tweet = tweets.get(_id, Tweet(_id))
-        tweet.add_votes(vote, count)
+        tweet.majority_vote = vote
         tweets[_id] = tweet
 
     sql = 'SELECT T.id, T.text FROM tweets_tweet AS T '
-    sql += 'WHERE EXISTS (SELECT * FROM vote_count AS V WHERE T.id=V.tweet_id)'
+    sql += 'WHERE EXISTS (SELECT * FROM majority_vote_unique AS V WHERE T.id=V.tweet_id)'
     cursor.execute(sql)
 
     for _id, text in cursor.fetchall():
@@ -88,12 +88,5 @@ def extract_tweeters():
         return users.values()
 
 if __name__ == '__main__':
-    # dump results to standard out
-	users = extract_tweeters()
-
-        for user in users:
-            print Geocode.query(user.location)
-	
-    # for tweet in extract():
-
-        # pickle.dump(tweet, sys.stdout)
+    for tweet in extract_classified_tweets():
+        print tweet
