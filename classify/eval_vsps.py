@@ -20,3 +20,14 @@ for _id, label, text in extract.extract_classified_tweets():
     results[(label, result)] += 1
 
 print results
+
+tp = results[('-', '-')]
+tn = results[('X', 'X')]
+fp = results[('X', '-')]
+fn = results[('-', 'X')]
+
+precision = float(tp) / (tp + fp)
+recall = float(tp) / (tp + fn)
+accuracy = (float(tp) + float(tn)) / (tp + tn + fn + fp)
+
+print precision, recall, accuracy
