@@ -1,6 +1,13 @@
 import pandas as pd
 import numpy as np
 import shapefile
+import sys
+
+# Hack: append common/ to sys.path
+sys.path.append("../common")
+sys.path.append("../queries")
+
+import anova
 
 # Given a shapeObject return a list of list for latitude and longitudes values
 #       - Handle scenarios where there are multiple parts to a shapeObj
@@ -13,21 +20,17 @@ def getParts ( shapeObj ):
     end = len( shapeObj.points ) - 1
     segments = list( shapeObj.parts ) + [ end ]
 
-
     for i in range( num_parts ):
         points.append( shapeObj.points[ segments[i]:segments[i+1] ] )
-
 
     return points
 
 
-# Return a dict with three elements
-#        - state_name
-#        - total_area
+# Return a dict with two elements
 #        - list of list representing latitudes
 #        - list of list representing longitudes
 #
-#  Input: State Name & ShapeFile Object
+#  Input: County tuple & ShapeFile Object
 
 def getDict ( county, shapefile ):
 
@@ -71,28 +74,33 @@ def getDict ( county, shapefile ):
     return countyDict
 	
 def main():
-	# Read the ShapeFile
-	dat = shapefile.Reader("./shapefile/USCounties.shp")
+	# # Read the ShapeFile
+	# dat = shapefile.Reader("./shapefile/USCounties.shp")
 
-	# Create a list of county tuples of (County, State, Color)
-	counties = [(i[0], i[1], "#FFFEFF") for i in dat.iterRecords()]
+	# # Create a list of county tuples of (County, State, Color)
+	# counties = [(i[0], i[1], "#FFFEFF") for i in dat.iterRecords()]
 
-	# Create the Plot
+	# # Create the Plot
 
-	from bokeh.plotting import *
-	output_file("us_counties.html")
+	# from bokeh.plotting import *
+	# output_file("us_counties.html")
 
-	TOOLS="pan,wheel_zoom,box_zoom,reset,previewsave"
-	figure(title="Vaccination Tweets by County", tools=TOOLS, plot_width=900, plot_height=800)
+	# TOOLS="pan,wheel_zoom,box_zoom,reset,previewsave"
+	# figure(title="Vaccination Tweets by County", tools=TOOLS, plot_width=900, plot_height=800)
 	
-	hold()
+	# hold()
 	
-	count = 0
-	for county in counties:
-		data = getDict(county, dat)
-		patches(data[(county[0], county[1])]['lat_list'], data[(county[0], county[1])]['lng_list'], \
-				fill_color = county[2], line_color = "black")
+	# count = 0
+	# for county in counties:
+		# data = getDict(county, dat)
+		# patches(data[(county[0], county[1])]['lat_list'], data[(county[0], county[1])]['lng_list'], \
+				# fill_color = county[2], line_color = "black")
 
-	show()
+	# show()
+	
+	d = anova.average_user_scores()
+	d2 = anova.county_results(d)
+	
+.strip('County', 'City').strip(' ')
 
 main()
