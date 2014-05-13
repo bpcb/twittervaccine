@@ -55,7 +55,7 @@ d2 = county_results(d)
 f, p = scipy.stats.f_oneway(*d2.values())
 print f, p
 
-# Run Kruskal test which is less stringent with assumptions than ANOVA.
+# Run Kruskal test which makes less stringent assumptions than ANOVA.
 
 value_arrays = []
 for values in d2.values():
