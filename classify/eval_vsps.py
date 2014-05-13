@@ -11,7 +11,10 @@ scorer = score.SentimentScorer.from_vaccine_phrases()
 # confusion matrix: label, result => count
 results = {(x,y) : 0 for x in ['-', 'X'] for y in ['-', 'X']}
 
-for tweet in extract.extract_classified_tweets():
+tweets = extract.extract_classified_tweets()
+print 'Extracted %d tweets' % len(tweets)
+
+for tweet in tweets:
     score = scorer.get_document_score(tweet.text, normalize=False)
     if score < 0:
         result = '-'
