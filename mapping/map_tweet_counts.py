@@ -122,7 +122,7 @@ def generate_webpage():
 		if county in colors:
 			fill = colors[county]
 		else:
-			fill = "#EEE9E9"
+			fill = "black"
 		bp.patches(data[(county[0], county[1])]['lat_list'], data[(county[0], county[1])]['lng_list'], \
 				fill_color = fill, line_color = "black")
 
