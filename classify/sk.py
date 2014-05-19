@@ -21,7 +21,7 @@ def convert_labels_to_binary(Y, one_label_list):
     return X
 
 def create_classifier():
-    cv = CountVectorizer()
+    cv = CountVectorizer(decode_error='ignore')
     clf = MultinomialNB()
     pipeline = Pipeline([('vect', cv), ('clf', clf)])
     return pipeline
@@ -34,6 +34,10 @@ if __name__ == "__main__":
     labels = np.asarray(votes)
 
     labels = convert_labels_to_binary(labels, ['-'])
+
+    # vectorizer = CountVectorizer(decode_error='ignore')
+    # vectorizer.fit(tweets)
+    # print vectorizer.get_feature_names()
 
     X_train, X_test, y_train, y_test = train_test_split(
         tweets, labels, test_size=0.2, random_state=0)
