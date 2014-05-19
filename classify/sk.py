@@ -56,6 +56,7 @@ if __name__ == "__main__":
     print("Area Under Curve: %0.2f" % area)
 
     pl.clf()
+    pl.grid(True)
     pl.plot(recall, precision, label='Precision-Recall curve')
     pl.xlabel('Recall')
     pl.ylabel('Precision')
