@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 
 import numpy as np
-
+import pylab as pl
 import nltk.stem
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.cross_validation import train_test_split
+from sklearn.metrics import precision_recall_curve, auc
 
 import extract
 
@@ -29,7 +30,7 @@ def convert_labels_to_binary(Y, one_label_list):
     return X
 
 def create_classifier():
-    cv = StemmedTfidfVectorizer(decode_error='ignore')
+    cv = TfidfVectorizer(decode_error='ignore')
     clf = MultinomialNB()
     pipeline = Pipeline([('vect', cv), ('clf', clf)])
     return pipeline
@@ -43,12 +44,23 @@ if __name__ == "__main__":
 
     labels = convert_labels_to_binary(labels, ['-'])
 
-    vectorizer = StemmedTfidfVectorizer(decode_error='ignore')
-    vectorizer.fit(tweets)
-    print vectorizer.get_feature_names()
-
     X_train, X_test, y_train, y_test = train_test_split(
         tweets, labels, test_size=0.2, random_state=0)
     clf = create_classifier()
     clf.fit(X_train, y_train)
-    print clf.score(X_test, y_test)
+    print ("Accuracy: %0.2f" % clf.score(X_test, y_test))
+
+    proba = clf.predict_proba(X_test)
+    precision, recall, thresholds = precision_recall_curve(y_test, proba[:, 1])
+    area = auc(recall, precision)
+    print("Area Under Curve: %0.2f" % area)
+
+    pl.clf()
+    pl.plot(recall, precision, label='Precision-Recall curve')
+    pl.xlabel('Recall')
+    pl.ylabel('Precision')
+    pl.ylim([0.0, 1.05])
+    pl.xlim([0.0, 1.0])
+    pl.title('Precision-Recall example: AUC=%0.2f' % area)
+    pl.legend(loc="lower left")
+    pl.show()
