@@ -7,7 +7,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.cross_validation import train_test_split
-from sklearn.metrics import (precision_recall_curve, auc, precision_recall_fscore_support)
+from sklearn.metrics import *
 
 import extract
 
@@ -53,7 +53,7 @@ def show_plot(clf, X_test, y_test):
     pl.show()
 
 if __name__ == "__main__":
-    results = list(extract.extract_classified_tweets(1000))
+    results = list(extract.extract_classified_tweets(limit=20000))
     _ids, votes, texts = zip(*results)
 
     tweets = np.asarray(texts)
@@ -66,3 +66,7 @@ if __name__ == "__main__":
     clf = create_classifier()
     clf.fit(X_train, y_train)
     print ("Accuracy: %0.2f" % clf.score(X_test, y_test))
+
+    y_preds = clf.predict(X_test)
+    target_names = ['Non-negative', 'negative']
+    print (classification_report(y_test, y_preds, target_names=target_names))
