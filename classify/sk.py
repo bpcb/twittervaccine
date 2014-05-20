@@ -7,7 +7,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.cross_validation import train_test_split
-from sklearn.metrics import precision_recall_curve, auc
+from sklearn.metrics import (precision_recall_curve, auc, precision_recall_fscore_support)
 
 import extract
 
@@ -35,21 +35,7 @@ def create_classifier():
     pipeline = Pipeline([('vect', cv), ('clf', clf)])
     return pipeline
 
-if __name__ == "__main__":
-    results = list(extract.extract_classified_tweets(1000))
-    _ids, votes, texts = zip(*results)
-
-    tweets = np.asarray(texts)
-    labels = np.asarray(votes)
-
-    labels = convert_labels_to_binary(labels, ['-'])
-
-    X_train, X_test, y_train, y_test = train_test_split(
-        tweets, labels, test_size=0.2, random_state=0)
-    clf = create_classifier()
-    clf.fit(X_train, y_train)
-    print ("Accuracy: %0.2f" % clf.score(X_test, y_test))
-
+def show_plot(clf, X_test, y_test):
     proba = clf.predict_proba(X_test)
     precision, recall, thresholds = precision_recall_curve(y_test, proba[:, 1])
     area = auc(recall, precision)
@@ -65,3 +51,18 @@ if __name__ == "__main__":
     pl.title('Precision-Recall example: AUC=%0.2f' % area)
     pl.legend(loc="lower left")
     pl.show()
+
+if __name__ == "__main__":
+    results = list(extract.extract_classified_tweets(1000))
+    _ids, votes, texts = zip(*results)
+
+    tweets = np.asarray(texts)
+    labels = np.asarray(votes)
+
+    labels = convert_labels_to_binary(labels, ['-'])
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        tweets, labels, test_size=0.2, random_state=0)
+    clf = create_classifier()
+    clf.fit(X_train, y_train)
+    print ("Accuracy: %0.2f" % clf.score(X_test, y_test))
