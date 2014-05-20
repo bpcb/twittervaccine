@@ -32,7 +32,7 @@ def extract_text(limit=0):
     else:
         return cursor.fetchall()
 
-def extract_classified_tweets(collapse_labels=True):
+def extract_classified_tweets(collapse_labels=True, limit=0):
     """Extract all tweets with at least one sentiment vote.
 
     Tweets with ties in the majority vote count are omitted.
@@ -44,6 +44,9 @@ def extract_classified_tweets(collapse_labels=True):
     cursor = conn.cursor()
     query = 'SELECT V.tweet_id, V.vote, T.text FROM majority_vote_unique AS V'
     query += ' JOIN tweets_tweet AS T ON V.tweet_id=T.id'
+
+    if limit > 0:
+        query += ' LIMIT %d' % limit
 
     cursor.execute(query)
 

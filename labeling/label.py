@@ -21,7 +21,10 @@ if os.path.exists(OUTPUT_FILE):
 conn = get_database_connection(2001)
 cursor = conn.cursor()
 
-query = "select id, text from tweets_tweet"
+# Select tweets from among those classified by the PSU study
+query = 'SELECT V.tweet_id, T.text FROM majority_vote_unique AS V'
+query += ' JOIN tweets_tweet AS T ON V.tweet_id=T.id'
+
 cursor.execute(query)
 result = list(cursor.fetchall())
 random.shuffle(result)
