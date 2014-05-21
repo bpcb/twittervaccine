@@ -21,7 +21,6 @@ INSERT INTO revised_labels(id, label) VALUES (%s, %s)
 ON DUPLICATE KEY UPDATE label=%s;
 """
 
-
 LABEL_MAP = {'z': '-', 'x': 'X'}
 
 def get_records(philes):
