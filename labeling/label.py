@@ -29,19 +29,18 @@ cursor.execute(query)
 result = list(cursor.fetchall())
 random.shuffle(result)
 
-# z = Positive
-# x = Neutral
-# c = Negative
+# x = Neutral/Positive
+# z = Negative
 labels = []
 try:
     for _id, text in result:
         while True:
             ch = raw_input("%d %s : " % (_id, text))
-            if ch in ['z', 'x', 'c']:
+            if ch in ['z', 'x']:
                 labels.append((_id, ch))
                 break
             else:
-                print 'Choose either z (positive), x (neutral), or c (negative)'
+                print 'Choose either x (neutral or positive) or z (negative)'
 finally:
     with open(OUTPUT_FILE, 'w') as fh:
         for _id, label in labels:
