@@ -4,5 +4,4 @@ import score
 import evaluate
 
 scorer = score.SentimentScorer.from_vaccine_phrases()
-results = evaluate.evaluate_revised(scorer)
-evaluate.display_results(results)
+evaluate.evaluate_revised(scorer)
