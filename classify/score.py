@@ -74,6 +74,7 @@ class SentimentScorer(object):
                 d = ws.ngrams[len(words)]
                 d[tuple(words)] = score
 
+        del(ws.ngrams[1][('flu',)])
         return ws
 
     @classmethod
