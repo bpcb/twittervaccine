@@ -59,6 +59,27 @@ def extract_classified_tweets(collapse_labels=True, limit=0):
         cursor.close()
         conn.close()
 
+def extract_labeled_tweets(limit=0):
+    """Extract all tweets with a revised label.
+
+    Return an iterator of tuples of the form (id, vote, text)
+    """
+
+    conn = get_database_connection()
+    cursor = conn.cursor()
+    query = 'SELECT L.id, L.label, T.text FROM revised_labels AS L'
+    query += ' JOIN tweets_tweet AS T ON L.id=T.id'
+
+    if limit > 0:
+        query += ' LIMIT %d' % limit
+
+    try:
+        cursor.execute(query)
+        return cursor.fetchall()
+    finally:
+        cursor.close()
+        conn.close()
+
 def extract_tweeters():
 	"""
 	Extract all users with geographic information.

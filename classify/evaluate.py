@@ -6,10 +6,26 @@ import extract
 import publish
 
 def evaluate(scorer):
+    """Evaluate a scorer using PSU labels."""
     # confusion matrix: label, result => count
     results = {(x,y) : 0 for x in ['-', 'X'] for y in ['-', 'X']}
 
     for _id, label, text in extract.extract_classified_tweets():
+        score = scorer.get_document_score(text, normalize=False)
+        if score < 0:
+            result = '-'
+        else:
+            result = 'X'
+        results[(label, result)] += 1
+
+    return results
+
+def evaluate_revised(scorer):
+    """Evaluate a scorer using revised labels."""
+
+    results = {(x,y) : 0 for x in ['-', 'X'] for y in ['-', 'X']}
+
+    for _id, label, text in extract.extract_labeled_tweets():
         score = scorer.get_document_score(text, normalize=False)
         if score < 0:
             result = '-'
