@@ -43,10 +43,10 @@ def display_results(results):
     fp = results[('X', '-')]
     fn = results[('-', 'X')]
 
-    res = {'precision': float(tp) / (tp + fp),
-           'recall':  float(tp) / (tp + fn),
-           'accuracy': (float(tp) + float(tn)) / (tp + tn + fn + fp)
-           }
+    precision = float(tp) / (tp + fp)
+    recall =  float(tp) / (tp + fn)
+    accuracy = (float(tp) + float(tn)) / (tp + tn + fn + fp)
+    fscore = 2 * precision * recall / (precision + recall)
 
-    print res
+    print precision, recall, accuracy, fscore
 
