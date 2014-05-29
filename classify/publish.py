@@ -11,7 +11,7 @@ import git_rev
 from db import get_database_connection
 
 # mapping from algorithm name to code; this really should be stored in the database
-ALGORITHMS = { 'vsps': 1, 'afinn111' : 2, 'test': 999}
+ALGORITHMS = { 'vsps': 1, 'afinn111' : 2, 'afinn111_revised' : 3, 'test': 999}
 
 CREATE_SQL = """
 CREATE TABLE IF NOT EXISTS sentiment_score(
