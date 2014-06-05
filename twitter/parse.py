@@ -12,12 +12,13 @@ tweet = """
 """
 
 obj = json.loads(tweet)
-print obj['user'].keys()
+print obj.keys()
 print obj['text']
 print obj['created_at']
 print obj['user']['id']
 print obj['user']['name']
 print obj['user']['location']
+print obj['user']['following']
 
 # Emit a record with various fields
 attributes = [str(obj['user']['id']), obj['user']['name'], 
