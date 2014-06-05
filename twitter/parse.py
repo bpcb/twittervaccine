@@ -12,6 +12,7 @@ tweet = """
 """
 
 obj = json.loads(tweet)
+print obj['user'].keys()
 print obj['text']
 print obj['created_at']
 print obj['user']['id']
