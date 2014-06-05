@@ -53,13 +53,14 @@ def show_plot(clf, X_test, y_test):
     pl.show()
 
 if __name__ == "__main__":
-    results = list(extract.extract_classified_tweets(limit=20000))
-    _ids, votes, texts = zip(*results)
+    results = list(extract.extract_labled_tweets())
+    _ids, _labels, _tweets = zip(*results)
 
-    tweets = np.asarray(texts)
-    labels = np.asarray(votes)
+    tweets = np.asarray(_tweets)
+    labels = np.asarray(_labels)
 
-    labels = convert_labels_to_binary(labels, ['-'])
+    # remap z to 1, everything else to 0
+    labels = convert_labels_to_binary(labels, ['z'])
 
     X_train, X_test, y_train, y_test = train_test_split(
         tweets, labels, test_size=0.2, random_state=0)
