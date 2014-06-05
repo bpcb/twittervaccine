@@ -17,7 +17,7 @@ def average_user_scores():
 	-- emit average user score; note that user id defines location
 	select L.id AS user_id, L.county, L.state, avg(result) AS user_avg_score
 	from tweets_tweet AS T, sentiment_score AS S, usa_user_locations AS L
-	where T.id=S.id AND T.tweeter_id=L.id AND algorithm=1 AND L.county is not NULL
+	where T.id=S.id AND T.tweeter_id=L.id AND algorithm=3' AND L.county is not NULL
 	group by L.id, L.county, L.state;
 	"""
 
