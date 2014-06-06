@@ -35,23 +35,6 @@ def create_classifier():
     pipeline = Pipeline([('vect', cv), ('clf', clf)])
     return pipeline
 
-def show_plot(clf, X_test, y_test):
-    proba = clf.predict_proba(X_test)
-    precision, recall, thresholds = precision_recall_curve(y_test, proba[:, 1])
-    area = auc(recall, precision)
-    print("Area Under Curve: %0.2f" % area)
-
-    pl.clf()
-    pl.grid(True)
-    pl.plot(recall, precision, label='Precision-Recall curve')
-    pl.xlabel('Recall')
-    pl.ylabel('Precision')
-    pl.ylim([0.0, 1.05])
-    pl.xlim([0.0, 1.0])
-    pl.title('Precision-Recall example: AUC=%0.2f' % area)
-    pl.legend(loc="lower left")
-    pl.show()
-
 if __name__ == "__main__":
     results = list(extract.extract_labled_tweets())
     _ids, _labels, _tweets = zip(*results)
