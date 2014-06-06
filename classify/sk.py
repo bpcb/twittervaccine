@@ -30,26 +30,25 @@ def convert_labels_to_binary(Y, one_label_list):
     return X
 
 def create_classifier():
-    cv = TfidfVectorizer(decode_error='ignore')
+    cv = CountVectorizer(decode_error='ignore')
     clf = MultinomialNB()
     pipeline = Pipeline([('vect', cv), ('clf', clf)])
     return pipeline
 
 if __name__ == "__main__":
-    results = list(extract.extract_labled_tweets())
+    results = list(extract.extract_labeled_tweets())
     _ids, _labels, _tweets = zip(*results)
 
     tweets = np.asarray(_tweets)
     labels = np.asarray(_labels)
 
-    # remap z to 1, everything else to 0
-    labels = convert_labels_to_binary(labels, ['z'])
+    # remap '-' to 1, everything else to 0
+    labels = convert_labels_to_binary(labels, ['-'])
 
     X_train, X_test, y_train, y_test = train_test_split(
         tweets, labels, test_size=0.2, random_state=0)
     clf = create_classifier()
     clf.fit(X_train, y_train)
-    print ("Accuracy: %0.2f" % clf.score(X_test, y_test))
 
     y_preds = clf.predict(X_test)
     target_names = ['Non-negative', 'negative']
