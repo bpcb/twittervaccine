@@ -42,8 +42,8 @@ if __name__ == "__main__":
     tweets = np.asarray(_tweets)
     labels = np.asarray(_labels)
 
-    # remap '-' to 1, everything else to 0
-    labels = convert_labels_to_binary(labels, ['-'])
+    # remap 'X' to 1, everything else to 0
+    labels = convert_labels_to_binary(labels, ['X'])
 
     X_train, X_test, y_train, y_test = train_test_split(
         tweets, labels, test_size=0.2, random_state=0)
@@ -51,5 +51,5 @@ if __name__ == "__main__":
     clf.fit(X_train, y_train)
 
     y_preds = clf.predict(X_test)
-    target_names = ['Non-negative', 'negative']
+    target_names = ['Negative', 'Non-negative']
     print (classification_report(y_test, y_preds, target_names=target_names))
