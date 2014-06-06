@@ -59,13 +59,13 @@ def extract_classified_tweets(collapse_labels=True, limit=0):
         cursor.close()
         conn.close()
 
-def extract_labeled_tweets(limit=0):
+def extract_labeled_tweets(port=None, limit=0):
     """Extract all tweets with a revised label.
 
     Return an iterator of tuples of the form (id, vote, text)
     """
 
-    conn = get_database_connection()
+    conn = get_database_connection(port)
     cursor = conn.cursor()
     query = 'SELECT L.id, L.label, T.text FROM revised_labels AS L'
     query += ' JOIN tweets_tweet AS T ON L.id=T.id'
