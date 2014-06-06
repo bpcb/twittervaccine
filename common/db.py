@@ -1,7 +1,13 @@
 import pymysql
+import os
 
 def get_database_connection(port=None):
     if not port:
-        port = 3306
+        try:
+            with open(os.path.expanduser('~/.mysqlport')) as fh:
+                port = int(fh.read())
+        except Exception as e:
+            print e
+            port = 3306
     conn = pymysql.connect(host='localhost', port = port, user='root', db='vaccine')
     return conn
