@@ -5,11 +5,13 @@
 import extract
 import publish
 from scikit_nb_scorer import MultinomialNBScorer
+import numpy as np
 
 scorer = MultinomialNBScorer()
 results = []
 for i, (_id, text) in enumerate(extract.extract_text()):
-    results.append((_id, scorer.get_document_score(text)))
+    score = np.asscalar(scorer.get_document_score(text))
+    results.append((_id, score))
     if (i % 1000) == 0:
         print "%d" % i
 
