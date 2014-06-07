@@ -7,7 +7,7 @@ import publish
 from scikit_nb_scorer import MultinomialNBScorer
 
 scorer = MultinomialNBScorer()
-results = [(_id, scorer.get_document_score(text, normalize=False))
+results = [(_id, scorer.get_document_score(text))
            for (_id, text) in extract.extract_text()]
 publish.publish_sentiment('naivebayes', results)
 

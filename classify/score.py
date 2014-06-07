@@ -95,7 +95,7 @@ class SentimentScorer(object):
                 return score_dict[phrase], phrase_length
         return 0, 1 # No match: assign zero score to 1 token
 
-    def get_document_score(self, text, normalize=True):
+    def get_document_score(self, text, normalize=False):
         toks = get_tokens(text)
         idx = 0
         score = 0
