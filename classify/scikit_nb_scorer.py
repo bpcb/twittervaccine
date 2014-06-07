@@ -43,6 +43,7 @@ class MultinomialNBScorer(object):
     def get_document_score(self, text):
         """Score of a document is the probability that it's non-negative."""
         preds = self.clf.predict_proba([text])
+        return preds[0][1]
 
 if __name__ == '__main__':
     scorer = MultinomialNBScorer()
