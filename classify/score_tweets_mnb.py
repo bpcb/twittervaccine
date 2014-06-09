@@ -4,10 +4,10 @@
 
 import extract
 import publish
-from scikit_nb_scorer import MultinomialNBScorer
+from scikit_scorer import *
 import numpy as np
 
-scorer = MultinomialNBScorer()
+scorer = ScikitScorer(create_naive_bayes_classifier())
 results = []
 for i, (_id, text) in enumerate(extract.extract_text()):
     score = np.asscalar(scorer.get_document_score(text))

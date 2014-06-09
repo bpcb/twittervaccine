@@ -20,7 +20,7 @@ def convert_labels_to_binary(Y, one_label_list):
 
     return X
 
-def create_classifier():
+def create_naive_bayes_classifier():
     cv = CountVectorizer(decode_error='ignore')
     clf = MultinomialNB()
     pipeline = Pipeline([('vect', cv), ('clf', clf)])
@@ -46,7 +46,7 @@ class ScikitScorer(object):
         return preds[0][1]
 
 if __name__ == '__main__':
-    scorer = ScikitScorer(create_classifier())
+    scorer = ScikitScorer(create_naive_bayes_classifier())
     print scorer.get_document_score("vaccines are shocking, terrible poison.  do not get vaccinated! avoid avoid!")
     print scorer.get_document_score("sunshine and roses are nice things")
     print scorer.get_document_score("another shocking warning about swine flu vaccine")
