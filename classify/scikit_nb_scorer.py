@@ -26,8 +26,9 @@ def create_classifier():
     pipeline = Pipeline([('vect', cv), ('clf', clf)])
     return pipeline
 
-class MultinomialNBScorer(object):
-    def __init__(self):
+class ScikitScorer(object):
+    def __init__(self, clf):
+        self.clf = clf
         results = list(extract.extract_labeled_tweets())
         _ids, _labels, _tweets = zip(*results)
 
@@ -37,7 +38,6 @@ class MultinomialNBScorer(object):
         # remap non-negative ('X') to 1, negative 0
         labels = convert_labels_to_binary(labels, ['X'])
 
-        self.clf = create_classifier()
         self.clf.fit(tweets, labels)
 
     def get_document_score(self, text):
@@ -46,7 +46,7 @@ class MultinomialNBScorer(object):
         return preds[0][1]
 
 if __name__ == '__main__':
-    scorer = MultinomialNBScorer()
+    scorer = ScikitScorer(create_classifier())
     print scorer.get_document_score("vaccines are shocking, terrible poison.  do not get vaccinated! avoid avoid!")
     print scorer.get_document_score("sunshine and roses are nice things")
     print scorer.get_document_score("another shocking warning about swine flu vaccine")
