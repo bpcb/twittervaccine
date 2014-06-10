@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
-"""Use scikit's multinomial naive bayes to classify tweets."""
+"""Use scikit to classify tweets."""
 
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.naive_bayes import MultinomialNB
+from sklearn.linear_model import LogisticRegression
 
 import extract
 
@@ -23,6 +24,13 @@ def convert_labels_to_binary(Y, one_label_list):
 def create_naive_bayes_classifier():
     cv = CountVectorizer(decode_error='ignore')
     clf = MultinomialNB()
+    pipeline = Pipeline([('vect', cv), ('clf', clf)])
+    return pipeline
+
+
+def create_logistic_regression_classifier():
+    cv = CountVectorizer(decode_error='ignore')
+    clf = LogisticRegression()
     pipeline = Pipeline([('vect', cv), ('clf', clf)])
     return pipeline
 
