@@ -112,7 +112,7 @@ def generate_webpage():
 	bp.output_file("us_counties.html")
 
 	TOOLS="pan,wheel_zoom,box_zoom,reset,previewsave"
-	bp.figure(title="Vaccination Tweets by County", tools=TOOLS, plot_width=900, plot_height=800)
+	bp.figure(title="Average county-level sentiment, 2009", tools=TOOLS, plot_width=900, plot_height=800)
 	
 	bp.hold()
 	
@@ -122,7 +122,7 @@ def generate_webpage():
 		if county in colors:
 			fill = colors[county]
 		else:
-			fill = "black"
+			fill = "#20B2AA"
 		bp.patches(data[(county[0], county[1])]['lat_list'], data[(county[0], county[1])]['lng_list'], \
 				fill_color = fill, line_color = "black")
 
