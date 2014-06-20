@@ -2,22 +2,20 @@
 
 CREATE TABLE vaccine.tweets_2014
 (
-id int NOT NULL AUTO_INCREMENT,
-tweet_id int,
-user_id int,
+tweet_id BIGINT NOT NULL,
+user_id BIGINT,
 text varchar(255),
 created_at datetime,
-PRIMARY KEY (id)
+PRIMARY KEY (tweet_id)
 )
 ;
 
 CREATE TABLE vaccine.users_2014
 (
-id int NOT NULL AUTO_INCREMENT,
-user_id int,
+user_id BIGINT NOT NULL,
 user_name varchar(255),
 location varchar(255),
-PRIMARY KEY (id)
+PRIMARY KEY (user_id)
 )
 ;
 
