@@ -22,4 +22,4 @@ plt.xlabel('Average user sentiment score by state')
 plt.ylabel('H1N1 vaccination rate in 2010 in high risk groups (%)')
 plt.rcParams['xtick.major.pad'] = 8
 plt.rcParams['ytick.major.pad'] = 8
-plt.savefig('./logistic_sentiment_vacc_rate.png')Tzbh64Y5
+plt.savefig('./logistic_sentiment_vacc_rate.png')
