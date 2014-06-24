@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-"""Compute naive bayes sentiment scores; store in the database."""
+# Andrew Whitaker
+
+"""Compute sentiment scores using logistic regression; store in the database."""
 
 import extract
 import publish
