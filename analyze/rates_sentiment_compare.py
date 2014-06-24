@@ -1,3 +1,10 @@
+# Ben Brooks
+ 
+# Plots average state sentiment score as calculated by a logistic regression classifier vs. 
+# H1N1 vaccination rates amongst high risk groups.
+# Correlation r2 = 0.40
+
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
