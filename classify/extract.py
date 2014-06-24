@@ -16,15 +16,15 @@ from tweeter import *
 
 from db import get_database_connection
 
-def extract_text(limit=0):
-    """Extract (tweet_id, text) from the database for all tweets.
+def extract_text(limit=0, table):
+    """Extract (tweet_id, text) from the database for all tweets from given table of tweets.
 
     If limit is non-zero, return this many tuples.
     """
     conn = get_database_connection()
     cursor = conn.cursor()
 
-    sql = 'SELECT id, text FROM tweets_tweet'
+    sql = 'SELECT id, text FROM %s' % (table)
     cursor.execute(sql)
 
     if limit > 0:

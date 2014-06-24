@@ -22,7 +22,8 @@ CREATE TABLE IF NOT EXISTS sentiment_score(
 
 INSERT_SQL = """
 INSERT INTO sentiment_score(id, algorithm, revision, result)
-VALUES (%s, %s, %s, %s);"""
+VALUES (%s, %s, %s, %s);
+"""
 
 def publish_sentiment(algorithm, tweets):
     """Store a list of sentiment analysis results into the data base.
