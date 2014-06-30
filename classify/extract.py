@@ -16,15 +16,16 @@ from tweeter import *
 
 from db import get_database_connection
 
-def extract_text(limit=0, table):
+def extract_text(table, limit=0):
     """Extract (tweet_id, text) from the database for all tweets from given table of tweets.
 
     If limit is non-zero, return this many tuples.
     """
-    conn = get_database_connection()
+    conn = get_database_connection(port = 2001)
     cursor = conn.cursor()
 
-    sql = 'SELECT id, text FROM %s' % (table)
+	# SQL statement should read SELECT id, text FROM %s' % (table) if using old tweets
+    sql = 'SELECT tweet_id, text FROM %s' % (table)
     cursor.execute(sql)
 
     if limit > 0:
@@ -59,7 +60,7 @@ def extract_classified_tweets(collapse_labels=True, limit=0):
         cursor.close()
         conn.close()
 
-def extract_labeled_tweets(port=None, limit=0):
+def extract_labeled_tweets(port=2001, limit=0):
     """Extract all tweets with a revised label.
 
     Return an iterator of tuples of the form (id, vote, text)
