@@ -31,6 +31,7 @@ PRIMARY KEY (tweet_id, algorithm, revision)
 
 CREATE TABLE IF NOT EXISTS vaccine.user_locations_2014(
 user_id BIGINT,
+user_name VARCHAR(64),
 quality INT,
 latitude FLOAT,
 longitude FLOAT,

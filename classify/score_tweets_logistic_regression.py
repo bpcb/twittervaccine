@@ -11,9 +11,9 @@ import numpy as np
 
 scorer = ScikitScorer(create_logistic_regression_classifier())
 results = []
-for i, (_id, text) in enumerate(extract.extract_text()):
+for i, (tweet_id, text) in enumerate(extract.extract_text('tweets_2014', limit = 10000)):
     score = np.asscalar(scorer.get_document_score(text))
-    results.append((_id, score))
+    results.append((tweet_id, score))
     if (i % 1000) == 0:
         print "%d" % i
 
