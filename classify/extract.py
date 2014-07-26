@@ -21,7 +21,7 @@ def extract_text(table, limit=0):
 
     If limit is non-zero, return this many tuples.
     """
-    conn = get_database_connection(port = 2001)
+    conn = get_database_connection()
     cursor = conn.cursor()
 
 	# SQL statement should read SELECT id, text FROM %s' % (table) if using old tweets
@@ -60,13 +60,13 @@ def extract_classified_tweets(collapse_labels=True, limit=0):
         cursor.close()
         conn.close()
 
-def extract_labeled_tweets(port=2001, limit=0):
+def extract_labeled_tweets(limit=0):
     """Extract all tweets with a revised label.
 
     Return an iterator of tuples of the form (id, vote, text)
     """
 
-    conn = get_database_connection(port)
+    conn = get_database_connection()
     cursor = conn.cursor()
     query = 'SELECT L.id, L.label, T.text FROM revised_labels AS L'
     query += ' JOIN tweets_tweet AS T ON L.id=T.id'
