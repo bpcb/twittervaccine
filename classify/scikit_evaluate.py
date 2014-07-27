@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import numpy as np
-import pylab as pl
 import nltk.stem
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.pipeline import Pipeline
@@ -9,6 +8,8 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.linear_model import LogisticRegression
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import *
+
+from scikit_scorer import create_logistic_regression_classifier
 
 import extract
 
@@ -30,12 +31,6 @@ def convert_labels_to_binary(Y, one_label_list):
 
     return X
 
-def create_classifier():
-    cv = CountVectorizer(decode_error='ignore')
-    clf = MultinomialNB()
-    pipeline = Pipeline([('vect', cv), ('clf', clf)])
-    return pipeline
-
 if __name__ == "__main__":
     results = list(extract.extract_labeled_tweets())
     _ids, _labels, _tweets = zip(*results)
@@ -48,7 +43,7 @@ if __name__ == "__main__":
 
     X_train, X_test, y_train, y_test = train_test_split(
         tweets, labels, test_size=0.2, random_state=0)
-    clf = create_classifier()
+    clf = create_logistic_regression_classifier()
     clf.fit(X_train, y_train)
 
     y_preds = clf.predict(X_test)
