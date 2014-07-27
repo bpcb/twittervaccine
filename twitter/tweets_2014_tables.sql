@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS vaccine.tweets_2014
 tweet_id BIGINT NOT NULL,
 user_id BIGINT,
 text varchar(255),
-created_at datetime,
+created_at varchar(255),
 PRIMARY KEY (tweet_id)
 )
 ;
