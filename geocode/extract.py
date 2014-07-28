@@ -7,6 +7,7 @@
 
 import sys
 import traceback
+from unidecode import unidecode
 
 # Hack: append common/ to sys.path
 sys.path.append("../common")
@@ -63,7 +64,7 @@ if __name__ == '__main__':
 
     for user in users:
         try:
-            geolocation = Geocode(user['location'], user_id = user['user_id'])
+            geolocation = Geocode(unidecode(user['location']), user_id = user['user_id'])
             insert_record(geolocation.results, "user_locations_2014")
         except:
             traceback.print_exc(file=sys.stdout)
