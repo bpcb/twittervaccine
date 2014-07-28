@@ -49,4 +49,6 @@ def in_database(entry, column, table):
     else:
         return True
     
-    
+if __name__ == '__main__':
+    assert in_database(entry = 591, column = 'user_id', table = 'users_2014') == True
+    assert in_database(entry = 0000000000, column = 'user_id', table = 'users_2014') == False
