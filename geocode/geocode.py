@@ -4,7 +4,7 @@ from time import sleep
 import yql
 
 #These are identifiers that sometimes preprend lat, long strings
-REVERSE_IDENTIFIERS = ['\xc3\x9cT:', 'iPhone:']
+REVERSE_IDENTIFIERS = ['UT:', 'iPhone:']
 
 #These stop words taken from Lucene's StopAnalyzer.java class. 
 #Extra word: 'here' added, because strangely enough this resolves to somewhere in 
