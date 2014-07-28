@@ -8,5 +8,5 @@ def get_database_connection(port=None):
                 port = int(fh.read())
         except Exception as e:
             port = 3306
-    conn = pymysql.connect(host = 'localhost', port = port, user='root', db='vaccine')
+    conn = pymysql.connect(host = 'localhost', port = port, user='root', db='vaccine', charset = 'utf8')
     return conn
