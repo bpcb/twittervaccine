@@ -44,6 +44,9 @@ def in_database(entry, column, table):
     
     results = cursor.fetchall()
     
+    cursor.close()
+    conn.close()
+    
     if len(results) == 0:
         return False
     else:
