@@ -65,6 +65,5 @@ if __name__ == '__main__':
         try:
             geolocation = Geocode(user['location'], user_id = user['user_id'])
             insert_record(geolocation.results, "user_locations_2014")
-            print user['location']
         except:
             traceback.print_exc(file=sys.stdout)

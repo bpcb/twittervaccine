@@ -17,7 +17,7 @@ def insert_record(record, table):
 	keys = [key for key, val in tups]
 	vals = [val for key, val in tups]
 
-	conn = get_database_connection()
+	conn = get_database_connection(port = 2001)
 	cursor = conn.cursor()
 
 	num_cols = len(keys)
