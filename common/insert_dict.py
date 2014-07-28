@@ -30,3 +30,23 @@ def insert_record(record, table):
 	conn.commit()
 	cursor.close()
 	conn.close()
+    
+def in_database(entry, column, table):
+    """
+    Test whether entry is already observed in a given column of a given table.
+    """
+    
+    conn = get_database_connection(port = 2001)
+    cursor = conn.cursor()
+    
+    query = 'SELECT * FROM %s WHERE %s = %s' % (table, column, entry) 
+    cursor.execute(query)
+    
+    results = cursor.fetchall()
+    
+    if len(results) == 0:
+        return False
+    else:
+        return True
+    
+    

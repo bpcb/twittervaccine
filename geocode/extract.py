@@ -65,7 +65,8 @@ if __name__ == '__main__':
     for user in users:
         try:
             print unidecode(user['location'])
-            geolocation = Geocode(unidecode(user['location']), user_id = user['user_id'])
-            insert_record(geolocation.results, "user_locations_2014")
+            if not in_database(entry = user['user_id'], column = 'user_id', table = 'user_locations_2014'):
+                geolocation = Geocode(unidecode(user['location']), user_id = user['user_id'])
+                insert_record(geolocation.results, "user_locations_2014")
         except:
             traceback.print_exc(file=sys.stdout)
