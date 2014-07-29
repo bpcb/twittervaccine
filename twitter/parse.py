@@ -6,7 +6,7 @@ import sys
 sys.path.append("../common")
 
 import json, glob
-from insert_dict import insert_record
+from insert_dict import *
 
 """
 Parse tweets as emitted by the twitter API.
@@ -19,7 +19,7 @@ for json_file in glob.glob('/mnt/tweets*.json'):
 			line = line.strip()
 			if len(line) == 0:
 				continue
-
+            
 			obj = json.loads(line)
 
 			tweet = dict()
@@ -33,6 +33,6 @@ for json_file in glob.glob('/mnt/tweets*.json'):
 			user['user_id'] = obj['user']['id']
 			user['user_name'] = obj['user']['screen_name']
 			user['location'] = obj['user']['location']
-		
-			insert_record(tweet, 'tweets_2014')
-			insert_record(user, 'users_2014')
+            
+            insert_record(tweet, 'tweets_2014')
+            insert_record(user, 'users_2014')

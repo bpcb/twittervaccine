@@ -34,7 +34,6 @@ def county_results(query_results):
     for _id, county, state, avg in query_results:
         d[(county, state)].append(avg)
     
-    print d
     # Filter out counties with less than 20 users.
     d2 = {key: val for key, val in d.iteritems() if len(val) >= 20}
     
@@ -63,7 +62,8 @@ if __name__ == '__main__':
 
     d = average_user_scores(query)
     d2 = county_results(d)
-
+    print len(d2)
+    
     # Run ANOVA over resulting 417 counties (for 2009 data; still running 2014 data).
 
     f, p = scipy.stats.f_oneway(*d2.values())
