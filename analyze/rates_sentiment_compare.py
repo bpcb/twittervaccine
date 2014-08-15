@@ -30,3 +30,20 @@ plt.ylabel('H1N1 vaccination rate in 2010 in high risk groups (%)')
 plt.rcParams['xtick.major.pad'] = 8
 plt.rcParams['ytick.major.pad'] = 8
 plt.savefig('./logistic_sentiment_vacc_rate.png')
+plt.close()
+
+
+
+print correlation
+x = np.arange(85, 95, 1)
+m, b = np.polyfit(combined['mmr'], combined['init_target_groups'], 1)
+
+plt.scatter(x = combined['mmr'], y = combined['init_target_groups'])
+plt.grid()
+plt.plot(x, m*x + b, '-', color = 'red', linewidth = 2)
+plt.xlabel('MMR vaccination rate by state, 2012')
+plt.ylabel('H1N1 vaccination rate in 2010 in high risk groups (%)')
+plt.rcParams['xtick.major.pad'] = 8
+plt.rcParams['ytick.major.pad'] = 8
+plt.savefig('./mmr_v_h1n1.png')
+
