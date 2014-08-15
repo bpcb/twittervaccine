@@ -32,6 +32,22 @@ GROUP BY L.user_id, L.city, L.state
 )
 """
 
+# Query that emits average value by user for 2009 data.  
+query_2009_indiv = """
+SELECT U.twitter_user_id AS user_id, L.id AS id, L.city, L.state, avg(result) AS user_avg_score
+FROM tweets_tweet AS T, sentiment_score AS S, usa_user_locations AS L, tweeter_tweeter AS U
+WHERE U.id=T.id AND T.id=S.id AND T.tweeter_id=L.id AND algorithm='5' AND L.city IS NOT NULL AND L.country='United States'
+GROUP BY U.twitter_user_id;
+"""
+
+# Query that instead emits the average value for users in 2014 data.
+query_2014_indiv = """
+SELECT L.user_id, L.city, L.state, AVG(result) AS user_avg_score
+FROM tweets_2014 AS T, sentiment_score_2014 AS S, user_locations_2014 AS L
+WHERE T.tweet_id=S.tweet_id AND T.user_id=L.user_id AND algorithm='5' AND L.city IS NOT NULL AND L.country='United States'
+GROUP BY L.user_id;
+"""
+
 def average_user_scores(query):
     """
     Queries SQL database to return an object with average score
@@ -86,10 +102,8 @@ def anova():
             value_arrays.append(np.array(values))
         h, p2 = scipy.stats.kruskal(*value_arrays)
         print h, p2
-
-if __name__ == '__main__':
-    # anova()
-    
+       
+def compare_by_city():       
     df_2014 = pd.read_sql(query_2014, get_database_connection(port = 2001))
     stats_2014 = df_2014[['city', 'state', 'user_avg_score']].groupby(['city', 'state']).agg(['mean', 'count'])
     stats_2014_20_users = stats_2014[stats_2014['user_avg_score']['count'] >= 20]
@@ -109,3 +123,22 @@ if __name__ == '__main__':
     plt.rcParams['xtick.major.pad'] = 8
     plt.rcParams['ytick.major.pad'] = 8
     plt.savefig('./compare_2009_2014_city.png')
+    
+def compare_by_indiv():
+    df_2014_indiv = pd.read_sql(query_2014_indiv, get_database_connection(port = 2001))
+    df_2009_indiv = pd.read_sql(query_2009_indiv, get_database_connection(port = 2001))
+    
+    combined = pd.merge(df_2014_indiv, df_2009_indiv, on = 'user_id', how = 'inner')
+    
+    plt.scatter(combined['user_avg_score_x'], combined['user_avg_score_y'])
+    plt.grid()
+    plt.xlabel('Average user sentiment score, 2014')
+    plt.ylabel('Average user sentiment score, 2009')
+    plt.rcParams['xtick.major.pad'] = 8
+    plt.rcParams['ytick.major.pad'] = 8
+    plt.savefig('./compare_2009_2014_indiv.png')
+
+if __name__ == '__main__':
+    anova()
+    compare_by_city()
+    compare_by_indiv()
