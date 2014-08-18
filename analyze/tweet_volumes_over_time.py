@@ -14,9 +14,41 @@ import matplotlib.dates as dates
 import matplotlib.ticker as ticker
 from collections import defaultdict
 import numpy as np
+import pandas as pd
 
 query_2014 = 'SELECT created_at FROM tweets_2014'
 query_2009 = 'SELECT timestamp FROM tweets_tweet'
+
+query_negative_2014 = """
+SELECT created_at FROM tweets_2014 WHERE text LIKE \'%shouldn\\'t%\'
+    OR text LIKE \'%should not%\'
+    OR text LIKE \'%must not%\'
+    OR text LIKE \'%mustn\\'t%\'
+    OR text LIKE \'%don\\'t%\'
+    OR text LIKE \'%do not%\'
+    OR text LIKE \'%won\\'t%\'
+    OR text LIKE \'%will not%\'
+    OR text LIKE \'%renounce%\'
+    OR text LIKE \'%boycott%\'
+    OR text LIKE \'%refuse%\'
+    OR text LIKE \'%mandatory%\'
+    OR text LIKE \'%force%\'
+    OR text LIKE \'%forcing%\'
+    OR text LIKE \'%coerce%\'
+    OR text LIKE \'%coercing%\'
+    OR text LIKE \'%require%\'
+    OR text LIKE \'%have to%\'
+    OR text LIKE \'%avoid%\'
+    OR text LIKE \'%never%\'
+    OR text LIKE \'%untested%\'
+    OR text LIKE \'%poison%\'
+    OR text LIKE \'%not necessary%\'
+    OR text LIKE \'%not vaccinating%\'
+    OR text LIKE \'%not vaccinated%\'
+    OR text LIKE \'%not vaccinate%\';
+"""
+    
+
 
 def execute_query(query):
     conn = get_database_connection(port = 2001)
@@ -105,7 +137,34 @@ def plot(x_2009, y_2009, x_2014, y_2014):
     plt.grid()   
     plt.ylabel('Number of vaccination-related tweets per day')
     plt.savefig('./compare_2009_2014_tweet_volumes.png')
+    
+def plot_stability(x_negative_2014, y_negative_2014, x_2014, y_2014):
+    fig, ax = plt.subplots()
+    
+    frac = [float(neg) / total for neg, total in zip(y_negative_2014, y_2014)]
+    # There was a hole in data collection in the 2014 data. 
+    # Separating into two lines for clarity.
+    ax.plot(x_2014[0:7], frac[0:7], 'b-')
+    ax.plot(x_2014[8:], frac[8:], 'b-')
+    
+    
+    ax.xaxis.set_major_locator(dates.MonthLocator())
+    ax.xaxis.set_minor_locator(dates.MonthLocator(bymonthday = 15))
 
+    ax.xaxis.set_major_formatter(ticker.NullFormatter())
+    ax.xaxis.set_minor_formatter(dates.DateFormatter('%b'))
+
+    ax.set_xlim([DT.datetime.date(DT.datetime.strptime('Apr 01', '%b %d')), DT.datetime.date(DT.datetime.strptime('Aug 1', '%b %d'))])
+
+    for tick in ax.xaxis.get_minor_ticks():
+        tick.tick1line.set_markersize(0)
+        tick.tick2line.set_markersize(0)
+        tick.label1.set_horizontalalignment('center') 
+    
+    plt.grid()   
+    plt.ylabel('Fraction of tweets per day containing a negative keyword')
+    plt.savefig('./negative_tweet_fraction.png')
+    
 def main():
     results_list_2009 = execute_query(query_2009)
     date_freq_2009 = parse_2009(results_list_2009)
@@ -116,6 +175,12 @@ def main():
     x_2014, y_2014 = create_data_2014(date_freq_2014)    
     
     plot(x_2009, y_2009, x_2014, y_2014)
+    
+    results_list_negative = execute_query(query_negative_2014)
+    date_freq_negative_2014 = parse_2014(results_list_negative)
+    x_negative_2014, y_negative_2014 = create_data_2014(date_freq_negative_2014)
+    plot_stability(x_negative_2014, y_negative_2014, x_2014, y_2014)
+    
 
 if __name__ == '__main__':
     main()
