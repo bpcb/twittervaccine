@@ -15,6 +15,8 @@ import matplotlib.ticker as ticker
 from collections import defaultdict
 import numpy as np
 import pandas as pd
+import statsmodels.api as sm
+
 
 query_2014 = 'SELECT created_at FROM tweets_2014'
 query_2009 = 'SELECT timestamp FROM tweets_tweet'
@@ -111,14 +113,20 @@ def create_data_2014(date_freq_2014):
 def plot(x_2009, y_2009, x_2014, y_2014):
     fig, ax = plt.subplots()
     
+    smooth_2009 = sm.nonparametric.lowess(endog = y_2009, exog = x_2009, frac = 0.5)
+    smooth_2014 = sm.nonparametric.lowess(endog = y_2014, exog = x_2014, frac = 0.5)
+    
     # There was a hole in data collection in the 2014 data. 
     # Separating into two lines for clarity.
-    ax.plot(x_2014[0:7], y_2014[0:7], 'b-', label = "2014 data")
-    ax.plot(x_2014[8:], y_2014[8:], 'b-')
+    ax.plot(x_2014[0:7], y_2014[0:7], color = 'blue', alpha = 0.5, linestyle = '--')
+    ax.plot(x_2014[8:], y_2014[8:], color = 'blue', alpha = 0.5, linestyle = '--')
+    ax.plot(x_2014[8:], [x[1] for ind, x in enumerate(smooth_2014) if ind > 7], color = 'blue', linewidth=3)
+    ax.plot(x_2014[0:7], [x[1] for ind, x in enumerate(smooth_2014) if ind < 7], color = 'blue', linewidth=3, label = 'Smoothed 2014 data')
     
     # A fraction of tweets were collected in January. Removing these from figure for clarity.
-    ax.plot(x_2009[19:], y_2009[19:], 'r-', label = "2009 data")
-    ax.plot(x_2009[19:], y_2009[19:], 'r-')
+    ax.plot(x_2009[19:], y_2009[19:], color = 'red', alpha = 0.5, linestyle = '--')
+    ax.plot(x_2009[19:], [x[1] for ind, x in enumerate(smooth_2009) if ind > 18], color = 'red', linewidth=3, label = 'Smoothed 2009 data')
+       
     
     ax.xaxis.set_major_locator(dates.MonthLocator())
     ax.xaxis.set_minor_locator(dates.MonthLocator(bymonthday = 15))
@@ -142,10 +150,11 @@ def plot_stability(x_negative_2014, y_negative_2014, x_2014, y_2014):
     fig, ax = plt.subplots()
     
     frac = [float(neg) / total for neg, total in zip(y_negative_2014, y_2014)]
+    smooth = sm.nonparametric.lowess(endog = frac, exog = x_2014, frac = 0.5)
     # There was a hole in data collection in the 2014 data. 
     # Separating into two lines for clarity.
-    ax.plot(x_2014[0:7], frac[0:7], 'b-')
-    ax.plot(x_2014[8:], frac[8:], 'b-')
+    ax.plot(x_2014[8:], frac[8:], color = 'gray', linestyle = '--', label = 'Daily value')
+    ax.plot(x_2014[8:], [x[1] for ind, x in enumerate(smooth) if ind > 7], color = 'blue', linewidth=3, label = 'Smoothed')
     
     
     ax.xaxis.set_major_locator(dates.MonthLocator())
@@ -154,13 +163,14 @@ def plot_stability(x_negative_2014, y_negative_2014, x_2014, y_2014):
     ax.xaxis.set_major_formatter(ticker.NullFormatter())
     ax.xaxis.set_minor_formatter(dates.DateFormatter('%b'))
 
-    ax.set_xlim([DT.datetime.date(DT.datetime.strptime('Apr 01', '%b %d')), DT.datetime.date(DT.datetime.strptime('Aug 1', '%b %d'))])
+    ax.set_xlim([DT.datetime.date(DT.datetime.strptime('May 01', '%b %d')), DT.datetime.date(DT.datetime.strptime('Aug 1', '%b %d'))])
 
     for tick in ax.xaxis.get_minor_ticks():
         tick.tick1line.set_markersize(0)
         tick.tick2line.set_markersize(0)
         tick.label1.set_horizontalalignment('center') 
     
+    plt.legend()
     plt.grid()   
     plt.ylabel('Fraction of tweets per day containing a negative keyword')
     plt.savefig('./negative_tweet_fraction.png')

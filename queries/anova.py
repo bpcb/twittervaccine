@@ -34,7 +34,7 @@ GROUP BY L.user_id, L.city, L.state
 
 # Query that emits average value by user for 2009 data.  
 query_2009_indiv = """
-SELECT U.twitter_user_id AS user_id, L.id AS id, L.city, L.state, avg(result) AS user_avg_score
+SELECT U.twitter_user_id AS user_id, L.city, L.state, avg(result) AS user_avg_score
 FROM tweets_tweet AS T, sentiment_score AS S, usa_user_locations AS L, tweeter_tweeter AS U
 WHERE U.id=T.id AND T.id=S.id AND T.tweeter_id=L.id AND algorithm='5' AND L.city IS NOT NULL AND L.country='United States'
 GROUP BY U.twitter_user_id;
@@ -46,6 +46,12 @@ SELECT L.user_id, L.city, L.state, AVG(result) AS user_avg_score
 FROM tweets_2014 AS T, sentiment_score_2014 AS S, user_locations_2014 AS L
 WHERE T.tweet_id=S.tweet_id AND T.user_id=L.user_id AND algorithm='5' AND L.city IS NOT NULL AND L.country='United States'
 GROUP BY L.user_id;
+"""
+
+new_query = """
+SELECT U.user_id, L.city, L.state, L2.city, L2.state
+FROM tweeter_tweeter as T, users_2014 as U, user_locations_2014 as L, usa_user_locations as L2
+WHERE T.twitter_user_id=U.user_id
 """
 
 def average_user_scores(query):
@@ -132,6 +138,7 @@ def compare_by_indiv():
     
     plt.scatter(combined['user_avg_score_x'], combined['user_avg_score_y'])
     plt.grid()
+    plt.legend()
     plt.xlabel('Average user sentiment score, 2014')
     plt.ylabel('Average user sentiment score, 2009')
     plt.rcParams['xtick.major.pad'] = 8
