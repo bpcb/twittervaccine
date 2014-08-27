@@ -13,9 +13,10 @@ vac_rates = pd.read_csv('./vaccination_rates_2010.csv')
 h1n1_vac_rates = pd.read_csv('./h1n1_vaccination_rates_2010.csv')
 mumps_outbreaks = pd.read_csv('./mumps_incidence_2006-2013.csv')
 sentiment = pd.read_csv('./state_sentiment_scores.csv')
+sentiment_2014 = pd.read_csv('./state_sentiment_scores_2014.csv')
 combined = pd.merge(h1n1_vac_rates, sentiment, on = 'state')
 
-combined_outbreak = pd.merge(mumps_outbreaks, sentiment, on = 'state')
+combined_outbreak = pd.merge(mumps_outbreaks, sentiment_2014, on = 'state')
 
 correlation = combined.corr()
 print "AFINN:", correlation['score_afinn']
@@ -49,11 +50,15 @@ plt.savefig('./mmr_v_h1n1.png')
 plt.close()
 
 remove_outliers_2009 = combined_outbreak[combined_outbreak['incidence_2009_2013'] < 5]
+remove_outliers_2009 = remove_outliers_2009[remove_outliers_2009['state'] != 'Rhode Island']
+x = np.arange(0.77, 0.81, 0.01)
+m, b = np.polyfit(remove_outliers_2009['mean'], remove_outliers_2009['incidence_2009_2013'], 1)
 
-plt.scatter(x = remove_outliers_2009['score_logistic'], y = remove_outliers_2009['incidence_2009_2013'])
+plt.scatter(x = remove_outliers_2009['mean'], y = remove_outliers_2009['incidence_2009_2013'])
+# plt.plot(x, m*x + b, '-', color = 'red', linewidth = 2)
 plt.ylim([0,2.5])
 plt.grid()
-plt.xlabel('Average user sentiment score by state')
+plt.xlabel('Average user sentiment score by state, 2014')
 plt.ylabel('Mumps incidence per 100,000 population, 2009-2013')
 plt.rcParams['xtick.major.pad'] = 8
 plt.rcParams['ytick.major.pad'] = 8
@@ -62,9 +67,9 @@ plt.close()
 
 remove_outliers_2006 = combined_outbreak[combined_outbreak['incidence_2006_2013'] < 100]
 
-plt.scatter(x = remove_outliers_2006['score_logistic'], y = remove_outliers_2006['incidence_2006_2013'])
+plt.scatter(x = remove_outliers_2006['mean'], y = remove_outliers_2006['incidence_2006_2013'])
 plt.grid()
-plt.xlabel('Average user sentiment score by state')
+plt.xlabel('Average user sentiment score by state, 2014')
 plt.ylabel('Mumps incidence per 100,000 population, 2006-2013')
 plt.rcParams['xtick.major.pad'] = 8
 plt.rcParams['ytick.major.pad'] = 8
